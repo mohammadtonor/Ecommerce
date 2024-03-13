@@ -1,13 +1,12 @@
 import User from './../models/userModel.js';
+import asyncHandler from 'express-async-handler'
 
-
-export const createUser = async (req, res) => {
+export const createUser = asyncHandler(async (req, res) => {
     try {
-        console.log(req.body);
         const { email, password, ...other } = req.body;
         const findUser = await User.findOne({email});
         if (findUser) {
-            return res.status(400).json({message: 'User already exists'});
+            throw new Error("User already exists");
         }
 
         const newUser = new User({
@@ -20,4 +19,24 @@ export const createUser = async (req, res) => {
     } catch (error) {
        throw new Error(error)
     }
-}
+})
+
+export const loginUser = asyncHandler(async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        
+        const user = await User.findOne({email});
+        if (!user) {
+            throw new Error("User does not exist");
+        }
+
+        const isMatch = await user.isPasswordMatched(password);
+        if (!isMatch) {
+            throw new Error("Password is incorrect");
+        }
+        
+        res.status(200).json(user);
+    } catch (error) {
+        throw new Error(error)
+    }
+})
