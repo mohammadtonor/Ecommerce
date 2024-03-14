@@ -1,3 +1,4 @@
+import { generateToken } from '../config/jwtToken.js';
 import User from './../models/userModel.js';
 import asyncHandler from 'express-async-handler'
 
@@ -23,20 +24,74 @@ export const createUser = asyncHandler(async (req, res) => {
 
 export const loginUser = asyncHandler(async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { email, password: orginPassword } = req.body;
         
         const user = await User.findOne({email});
         if (!user) {
             throw new Error("User does not exist");
         }
 
-        const isMatch = await user.isPasswordMatched(password);
+        const isMatch = await user.isPasswordMatched(orginPassword);
         if (!isMatch) {
             throw new Error("Password is incorrect");
         }
-        
-        res.status(200).json(user);
+
+        const {password, __v,  ...reatUser} = user._doc;
+        res.status(200).json({ ...reatUser, token: generateToken(reatUser._id)});
     } catch (error) {
         throw new Error(error)
+    }
+})
+
+
+export const getAllUser =asyncHandler (async (req, res) => {
+    try {
+        const users = await User.find();
+        res.status(200).json(users);
+    } catch (error) {
+        throw new Error(error);
+    }
+})
+
+export const getUserById =asyncHandler (async (req, res) => {
+    try {
+        const { id } = req.params
+        const user = await User.findById(id);
+        if (!user) {
+            throw new Error("User does not exist");
+        }
+        res.status(200).json(user);
+    } catch (error) {
+        throw new Error(error);
+    }
+})
+
+export const DeleteUserById =asyncHandler (async (req, res) => {
+    try {
+        const { id } = req.params
+        const user = await User.findById(id);
+        if (!user) {
+            throw new Error("User does not exist");
+        }
+        await User.findByIdAndDelete(id);
+        res.status(200).json({message: `User By email: (${user.email}) deleted!`});
+    } catch (error) {
+        throw new Error(error);
+    }
+})
+
+export const updateUserById =asyncHandler (async (req, res) => {
+    try {
+        const { id } = req.params
+        const user = await User.findById(id);
+        if (!user) {
+            throw new Error("User does not exist");
+        }
+        const Updated = await User.findByIdAndUpdate(id, {
+            ...req.body
+        });
+        res.status(200).json({message: `User By email: (${user.email}) deleted!`});
+    } catch (error) {
+        throw new Error(error);
     }
 })
