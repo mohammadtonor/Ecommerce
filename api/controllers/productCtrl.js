@@ -4,24 +4,26 @@ import slugify from 'slugify';
 
 export const createProduct = asyncHandler(async (req, res) => {
     try {
-        if (req.body?.title) {
-            req.body.slug = slugify(req.body.title)
-        }
-        const product = await Product.create(req.body);
-        res.status(201).json(product);
+      if (req.body.title) {
+        req.body.slug = slugify(req.body.title);
+      }
+      const newProduct = await Product.create(req.body);
+      res.json(newProduct);
     } catch (error) {
-        throw new Error(error.message);
+      throw new Error(error);
     }
-    
-    res.json({
-        status: 201,
-        message: "Product created successfully",
-    })
-})
+  });
 
 export const getAllProducts = asyncHandler(async (req, res) => {
     try {
-        const products = await Product.find();
+        const queryObj = {...req.query};
+        const excludeQuery = ["page", "sort", "limit", "field"];
+        excludeQuery.forEach(el => delete queryObj[el]);
+        let queryStr = JSON.stringify(queryObj);
+        queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
+        const query = Product.find(JSON.parse(queryStr));
+        const products = await query;
+
         res.status(200).json(products);
     } catch (error) {
         throw new Error(error.message);
@@ -40,6 +42,9 @@ export const getProductById = asyncHandler(async (req, res) => {
 
 export const updateProduct = asyncHandler(async (req, res) => {
     try {
+        if (req.body?.title) {
+            req.body.slug = slugify(req.body.title)
+        }
         const { id } = req.params;
         const updatedProduct = await Product.findByIdAndUpdate(id, {
             ...req.body

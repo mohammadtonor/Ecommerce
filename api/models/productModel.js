@@ -32,11 +32,12 @@ const productSchema = new mongoose.Schema({
     },
     sold: {
         type: Number,
-        default: 0
+        default: 0,
+        select: false
     },
     brand: {
         type: String,
-        enum: ["Apple", "Lenovo", "Asuss"]
+        enum: ["Apple", "Lenovo", "Asuss", "HP"]
     }
     ,
     color: {
