@@ -96,3 +96,43 @@ export const updateUserById =asyncHandler (async (req, res) => {
         throw new Error(error);
     }
 })
+
+export const blockUser = asyncHandler( async (req, res) => {
+    const { id } = req.params;
+    try {
+        const block = await User.findByIdAndUpdate(
+            id,
+            {
+                isBlocked: true,
+            },
+            { 
+                new: true
+            }
+        );
+        res.status(200).json({
+            message: `User ${block.email} Blocked`
+        });
+    } catch (error) {
+        throw new Error(error);
+    }
+})
+
+export const unblockUser = asyncHandler( async (req, res) => {
+    const { id } = req.params;
+    try {
+        const block = await User.findByIdAndUpdate(
+            id,
+            {
+                isBlocked: false,
+            },
+            { 
+                new: true
+            }
+        );
+        res.status(200).json({
+            message: `User ${block.email} Unblocked`
+        });
+    } catch (error) {
+        throw new Error(error);
+    }
+})
