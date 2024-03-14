@@ -36,8 +36,8 @@ export const loginUser = asyncHandler(async (req, res) => {
             throw new Error("Password is incorrect");
         }
 
-        const {password, __v,  ...reatUser} = user._doc;
-        res.status(200).json({ ...reatUser, token: generateToken(reatUser._id)});
+        const {password, __v,  ...restUser} = user._doc;
+        res.status(200).json({ token: generateToken(restUser._id)});
     } catch (error) {
         throw new Error(error)
     }
@@ -60,7 +60,8 @@ export const getUserById =asyncHandler (async (req, res) => {
         if (!user) {
             throw new Error("User does not exist");
         }
-        res.status(200).json(user);
+        const {password, ...otherField} = user._doc;
+        res.status(200).json(otherField);
     } catch (error) {
         throw new Error(error);
     }
@@ -90,7 +91,7 @@ export const updateUserById =asyncHandler (async (req, res) => {
         const Updated = await User.findByIdAndUpdate(id, {
             ...req.body
         });
-        res.status(200).json({message: `User By email: (${user.email}) deleted!`});
+        res.status(200).json({message: `User By email: (${user.email}) Updated!`});
     } catch (error) {
         throw new Error(error);
     }
