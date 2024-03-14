@@ -1,7 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
-import cors from 'cors';
+import cookieParser from 'cookie-parser';
 
 import { dcConnect } from './config/dbConnect.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
@@ -13,6 +13,7 @@ const app = express();
 const PORT = process.env.PORT || 4000;
 
 app.use(express.json());
+app.use(cookieParser());
 
 
 app.use('/api/auth', authRouter);

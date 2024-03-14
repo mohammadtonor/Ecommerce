@@ -1,5 +1,5 @@
 import express from 'express';
-import { DeleteUserById, blockUser, getAllUser, getUserById, unblockUser, updateUserById } from '../controllers/userCtrl.js';
+import { DeleteUserById, blockUser, getAllUser, getUserById, handleRefreshToken, unblockUser, updateUserById } from '../controllers/userCtrl.js';
 import { authMiddleware, isAdmin } from '../middleware/authMiddleware.js';
 
 
