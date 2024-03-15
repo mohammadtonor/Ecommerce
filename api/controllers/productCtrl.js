@@ -21,9 +21,36 @@ export const getAllProducts = asyncHandler(async (req, res) => {
         excludeQuery.forEach(el => delete queryObj[el]);
         let queryStr = JSON.stringify(queryObj);
         queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
-        const query = Product.find(JSON.parse(queryStr));
-        const products = await query;
+        
+        let query = Product.find(JSON.parse(queryStr));
+        
+        // Sort BY
+        if (req.query.sort) {
+            const sortBY = req.query.sort.split(',').join(' ');
+            query.sort(sortBY);
+        } else {
+            query.sort('-createdAt');
+        }
+        
+        //Slecte Field
+        if (req.query.field) {
+            const field = req.query.field.split(',').join(' ');
+            query.select(field);
+        }  else {
+            query.select('-__v');
+        }
 
+        // Pagination
+        const page = req.query.page;
+        const limit = req.query.limit;
+        const skip = (page - 1) * limit;
+        console.log(page, limit, skip);
+        query = query.skip(skip).limit(limit);
+        if (req.query.page) {
+            const productCount = await Product.countDocuments();
+            if(skip >= productCount) throw new Error("This page dose not exists");
+        }
+        const products = await query;
         res.status(200).json(products);
     } catch (error) {
         throw new Error(error.message);
