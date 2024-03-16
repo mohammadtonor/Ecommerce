@@ -1,5 +1,6 @@
 import asyncHandler from "express-async-handler";
 import Product from "../models/productModel.js";
+import User from "../models/userModel.js";
 import slugify from 'slugify';
 
 export const createProduct = asyncHandler(async (req, res) => {
@@ -91,4 +92,27 @@ export const deleteProduct = asyncHandler(async (req, res) => {
     } catch (error) {
         throw new Error(error.message);
     }
+})
+
+export const addToWishList = asyncHandler(async (req, res) => {
+    try {
+        const  {_id } = req.user;
+        const {prodId} = req.body;
+        const user = await User.findById(_id);
+        const alreadyAdded = user.whashlist.find(id => id.toString() === prodId.toString());
+        let updatdUser;
+        if(alreadyAdded) {
+            updatdUser =await User.findByIdAndUpdate(_id, {
+                $pull: { whashlist: prodId }
+            }, {new: true})
+        } else {
+            updatdUser =await User.findByIdAndUpdate(_id, {
+                $push: { whashlist: prodId }
+            }, {new: true})
+        }
+        res.json(updatdUser);
+    } catch (error) {
+        throw new Error(error)
+    }
+
 })

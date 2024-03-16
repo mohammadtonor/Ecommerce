@@ -10,6 +10,9 @@ import authRouter from './routes/authRoute.js';
 import userRouter from './routes/userRoute.js';
 import productRouter from './routes/productRoute.js';
 import blogRouter from './routes/blogRoute.js';
+import categoryRouter from './routes/categoryroute.js';
+import blogCatRouter from './routes/blogCatRoute.js';
+import BrandRoute from './routes/brandRoute.js';
 
 dotenv.config();
 const app = express(); 
@@ -24,6 +27,9 @@ app.use('/api/auth', authRouter);
 app.use('/api/users', userRouter);
 app.use('/api/products', productRouter);
 app.use('/api/blogs', blogRouter);
+app.use('/api/categories', categoryRouter);
+app.use('/api/blogCatategory', blogCatRouter);
+app.use('/api/brands', BrandRoute);
 
 app.use(notFound)
 app.use(errorHandler)
