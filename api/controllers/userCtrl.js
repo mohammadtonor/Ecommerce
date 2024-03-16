@@ -4,6 +4,9 @@ import { validateMongodbId } from '../utils/validateMonodbId.js';
 import User from './../models/userModel.js';
 import asyncHandler from 'express-async-handler'
 import jwt from 'jsonwebtoken';
+import { sendEmail } from './emailCtrl.js';
+import crypto from 'crypto';
+import { log } from 'console';
 
 export const createUser = asyncHandler(async (req, res) => {
     try {
@@ -192,4 +195,58 @@ export const unblockUser = asyncHandler( async (req, res) => {
     } catch (error) {
         throw new Error(error);
     }
-})
+});
+
+export const updatePassword = asyncHandler(async (req, res) => {
+    const { _id } = req.user;
+    const { password } = req.body;
+    console.log(_id, password);
+    validateMongodbId(_id);
+    const user = await User.findById(_id);
+    if (password) {
+      user.password = password;
+      await user.createPasswordResetToken()
+      const updatedPassword = await user.save();
+      res.json(updatedPassword);
+    } else {
+      res.json(user);
+    }
+  });
+
+  export const forgotPasswordToken = asyncHandler(async (req, res) => {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) throw new Error("User not found by this Email");
+    try {
+        const token = await user.createPasswordResetToken();
+        await user.save();
+        const resetURL = `Hi, Please follow this link to reset Your Password. This link is valid till 10 minutes from now. <a href='http://localhost:5000/api/users/reset-password/${token}'>Click Here</>`;
+        const data = {
+            to: email,
+            subject: "Forgot PAssword Link",
+            htm: resetURL
+        } 
+        sendEmail(data);  
+        console.log(data.htm);
+        res.json(token);  
+    } catch (error) {
+        throw new Error(error.message);
+    }
+  })
+
+  export const resetePassword = asyncHandler( async (req, res) => {
+    const {password} = req.body;
+    const {token} = req.params;
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+    const user = await User.findOne({ 
+        passwordResetToken: hashedToken,
+        passwordResetExpires: { $gt: Date.now() }
+    });
+    if (!user) throw new Error("Password reset token is invalid or has expired");
+    
+    user.password = password;
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    await user.save();
+    res.json(user);
+  })
