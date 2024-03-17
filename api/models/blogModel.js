@@ -38,9 +38,7 @@ const blogShema = new mongoose.Schema({
             ref: "User"
         }
     ],
-    image: {
-        type: String,
-    },
+    images: [],
     author: {
         type: String,
         ref: "Admin"

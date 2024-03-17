@@ -1,7 +1,7 @@
 import Blog from './../models/blogModel.js';
-import User from './../models/userModel.js';
 import { validateMongodbId } from '../utils/validateMonodbId.js';
 import asyncHandler from 'express-async-handler'
+import { cloudinaryUploadImg } from '../utils/cloudinary.js';
 
 export const createBlog = asyncHandler(async (req, res) => {
     try {
@@ -108,5 +108,32 @@ export const togglelikeBlog = asyncHandler(async (req, res) => {
             isLiked: true
         }, { new: true });
         res.json(blogupdated);
+    }
+})
+
+export const uploadImages = asyncHandler( async (req, res) => {
+    const { id } = req.params;
+    validateMongodbId(id);
+    try {
+        const uploader = (path) => cloudinaryUploadImg(path, "images");
+        const urls = [];
+        const files = req.files;
+        for(const file of files) {
+            const { path } = file;
+            const newPath =await uploader(path)
+            console.log(newPath);
+            urls.push(newPath)
+        }
+        const findBlog = await Blog.findByIdAndUpdate(
+            id,
+             {
+                images: urls.map(file => file)
+            }, {
+                new: true
+            }
+        )
+        res.json(findBlog)
+    } catch (error) {
+        throw new Error(error)
     }
 })

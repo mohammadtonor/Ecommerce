@@ -1,10 +1,28 @@
 import express from 'express';
-import { addToWishList, createProduct, deleteProduct, getAllProducts, getProductById, rating, updateProduct } from '../controllers/productCtrl.js';
+import {
+    addToWishList,
+    createProduct,
+    deleteProduct, 
+    getAllProducts, 
+    getProductById, 
+    rating, 
+    updateProduct, 
+    uploadImages 
+} from '../controllers/productCtrl.js';
 import { authMiddleware, isAdmin } from './../middleware/authMiddleware.js';
+import { productImageResize, uploadPhoto } from '../middleware/uploadImages.js';
 
 const router = express.Router();
 
 router.post('/',authMiddleware, isAdmin, createProduct);
+router.put(
+    '/upload/:id', 
+    authMiddleware, 
+    isAdmin, 
+    uploadPhoto.array("images", 10),
+    productImageResize,
+    uploadImages
+);
 router.get('/', getAllProducts);
 router.put('/washlist',  authMiddleware, addToWishList);
 router.put('/rating',  authMiddleware, rating);
