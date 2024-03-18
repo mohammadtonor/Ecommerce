@@ -2,6 +2,7 @@ import Blog from './../models/blogModel.js';
 import { validateMongodbId } from '../utils/validateMonodbId.js';
 import asyncHandler from 'express-async-handler'
 import { cloudinaryUploadImg } from '../utils/cloudinary.js';
+import fs from 'fs'
 
 export const createBlog = asyncHandler(async (req, res) => {
     try {
@@ -121,8 +122,9 @@ export const uploadImages = asyncHandler( async (req, res) => {
         for(const file of files) {
             const { path } = file;
             const newPath =await uploader(path)
-            console.log(newPath);
+            console.log(path);
             urls.push(newPath)
+            //fs.unlink({path})
         }
         const findBlog = await Blog.findByIdAndUpdate(
             id,

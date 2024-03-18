@@ -1,12 +1,17 @@
 import { generateToken } from '../config/jwtToken.js';
 import { generateRefreshToken } from '../config/refreshToken.js';
 import { validateMongodbId } from '../utils/validateMonodbId.js';
+
 import User from './../models/userModel.js';
+import Address from './../models/addressModel.js';
+import Product from './../models/productModel.js';
+import Cart from './../models/cartModel.js';
+import Coupon from './../models/couponModel.js';
 import asyncHandler from 'express-async-handler'
 import jwt from 'jsonwebtoken';
 import { sendEmail } from './emailCtrl.js';
 import crypto from 'crypto';
-import { log } from 'console';
+import Order from '../models/orderModel.js';
 
 export const createUser = asyncHandler(async (req, res) => {
     try {
@@ -59,6 +64,42 @@ export const loginUser = asyncHandler(async (req, res) => {
         throw new Error(error)
     }
 })
+
+export const loginAdmin = asyncHandler(async (req, res) => {
+    try {
+        const { email, password: orginPassword } = req.body;
+        
+        const findAdmin = await User.findOne({email});
+
+        if(findAdmin.role !== 'admin') throw new Error("not Authorized");
+
+        if (!findAdmin) {
+            throw new Error("User does not exist");
+        }
+
+        const isMatch = await findAdmin.isPasswordMatched(orginPassword);
+        if (!isMatch) {
+            throw new Error("Password is incorrect");
+        }
+        const refreshToken = await generateRefreshToken(findAdmin._id);
+        await User.findByIdAndUpdate(
+            findAdmin._id,
+             {
+                refreshToken
+             },
+             { new: true }
+        )
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            maxAge: 72 * 60 * 60 * 1000,
+        })
+        const {password, __v,  ...restUser} = findAdmin._doc;
+        res.status(200).json({ token: generateToken(restUser._id)});
+    } catch (error) {
+        throw new Error(error)
+    }
+})
+
 
 export const handleRefreshToken = asyncHandler( async (req, res) => {
     const cookie = req.cookies;
@@ -250,4 +291,134 @@ export const updatePassword = asyncHandler(async (req, res) => {
     user.passwordResetExpires = undefined;
     await user.save();
     res.json(user);
+  })
+
+  export const getWishList = asyncHandler( async(req, res) => {
+    const { _id } = req.user
+    try {
+        const findUser = await User.findById(_id)
+            .select("whashlist")
+            .populate("whashlist", ["title", "category","price"]);
+        res.json(findUser);
+    } catch (error) {
+        throw new Error(error)
+    } 
+  });
+
+  export const saveAdress = asyncHandler(async(req, res) => {
+    const { _id } = req.user;
+    validateMongodbId(_id); //
+    try {
+        const address = await Address.create(req.body);
+        const user = await User.findByIdAndUpdate(
+            _id,
+            {
+                $push: {address}
+            },
+            {
+                new: true,
+            }
+        )
+        res.json(user);
+    } catch (error) {
+        throw new Error(error);
+    }
+  })
+
+  export const AddToCard = asyncHandler(async(req, res) => {
+    const { _id } = req.user;
+    validateMongodbId(_id); //
+    const {cart} = req.body
+    try {
+        const user = await User.findById(_id)
+
+        let products = [];
+        const checkCartExists = await Cart.findOneAndDelete({orderBy: user._id});
+        if (checkCartExists){
+            checkCartExists.deleteOne();
+        }
+
+        for (let i=0; i< cart.length; i++) {
+            let object = {};
+            object.product = cart[i]._id;
+            object.count = cart[i].count;
+            object.color = cart[i].color
+            const getPrice = await Product.findById(cart[i]._id).select("price")
+            object.price = getPrice.price
+            products.push(object);
+        }
+        const totalPrice = products
+            .map(product => product.price * product.count)
+            .reduce((prev, curr) => prev + curr, 0);
+
+        const newCart = await Cart.create({
+            products,
+            cartTotal: totalPrice,
+            orderBy: user._id
+        })
+
+        res.json(newCart)
+    } catch (error) {
+        throw new Error(error);
+    }
+  });
+
+  export const getUserCart = asyncHandler( async(req, res) => {
+    const {_id} = req.user;
+    try {
+        const cartUser = await Cart.findOne({orderBy: _id})
+            .populate( "products.product orderBy cartTotal",
+            ["_id", "title", "carrtTotal","firstName", "lastName"])
+        res.json(cartUser);
+    } catch (error) {
+        throw new Error(error);
+    }
+  })
+
+  export const emptyCart = asyncHandler( async(req, res) => {
+    const { _id } = req.user;
+    validateMongodbId(_id);
+    try {
+        const user = await User.findById(_id)
+        await Cart.findOneAndDelete({orderBy: user._id}) 
+        res.json({message: "Cart Successfuly Removed!"})
+    } catch (error) {
+        throw new Error(error)
+    }
+  });
+
+  export const applyCoupon = asyncHandler( async(req, res) => {
+    const { coupon } = req.body;
+    const { _id } = req.user;
+    validateMongodbId(_id);
+    try {
+        const validCoupon = await Coupon.findOne({ name: coupon});
+        if (!validCoupon) throw new Error("Coupon not Invalid");
+
+        const user = await User.findById(_id);
+        const { cartTotal } = await Cart.findOne({ orderBy: user._id});
+        const totalAfterDiscount = 
+            (cartTotal 
+            - (cartTotal * validCoupon.discount / 100))
+            .toFixed(2)
+        const cartAfterDiscount = await Cart.findOneAndUpdate(
+            { orderBy: user._id},
+            {totalAfterDiscount},
+            {new: true}
+        )
+        res.json(cartAfterDiscount);
+    } catch (error) {
+        throw new Error(error);
+    }
+  });
+
+  export const getUserOrders = asyncHandler(async(req, res) => {
+    const {_id} = req.user;
+    validateMongodbId(_id);
+    try {
+        const orders = await Order.find({ orderBy: _id})
+        res.json(orders);
+    } catch (error) {
+        throw new Error(error)
+    }
   })

@@ -14,6 +14,7 @@ import categoryRouter from './routes/categoryroute.js';
 import blogCatRouter from './routes/blogCatRoute.js';
 import BrandRoute from './routes/brandRoute.js';
 import couponRoute from './routes/couponRoute.js';
+import orderRoute from './routes/orderRoute.js';
 
 dotenv.config();
 const app = express(); 
@@ -32,6 +33,7 @@ app.use('/api/categories', categoryRouter);
 app.use('/api/blogCatategory', blogCatRouter);
 app.use('/api/brands', BrandRoute);
 app.use('/api/coupons', couponRoute);
+app.use('/api/orders', orderRoute);
 
 app.use(notFound)
 app.use(errorHandler)

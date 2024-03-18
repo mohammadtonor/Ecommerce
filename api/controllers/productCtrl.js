@@ -4,6 +4,7 @@ import User from "../models/userModel.js";
 import slugify from 'slugify';
 import {validateMongodbId} from './../utils/validateMonodbId.js'
 import {cloudinaryUploadImg} from "../utils/cloudinary.js"
+import fs from 'fs'
 
 export const createProduct = asyncHandler(async (req, res) => {
     try {
@@ -127,11 +128,13 @@ export const rating = asyncHandler(async (req, res) => {
         const alreadyRated = product.rating.find(rating => rating.postedby.toString() === _id.toString() );
         if(!alreadyRated) {
             await Product.findByIdAndUpdate(prodId, {
-                $push: { rating: {
-                    star: star,
-                    postedby: _id,
-                    comment
-                } },
+                $push: { 
+                    rating: {
+                        star: star,
+                        postedby: _id,
+                        comment
+                    } 
+                },
             }, {
                 new:  true
             })
@@ -182,9 +185,9 @@ export const uploadImages = asyncHandler( async (req, res) => {
         for(const file of files) {
             const { path } = file;
             const newPath =await uploader(path)
-            console.log(newPath);
             urls.push(newPath)
         }
+        
         const findProducts = await Product.findByIdAndUpdate(
             id,
              {
