@@ -38,10 +38,7 @@ const productSchema = new mongoose.Schema({
         enum: ["Apple", "Lenovo", "Asuss", "HP"]
     }
     ,
-    color: {
-        type: String,
-        enum: ["Black", "Brown", "Gray", "Red", "Green", "Yellow"]
-    },
+    color: [{ type: ObjectId, ref: "Color" }],
     rating: [{
       star: Number,
       postedby: { type: ObjectId, ref: "User"},
