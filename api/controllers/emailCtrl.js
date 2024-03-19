@@ -5,19 +5,19 @@ import  {Resend}  from 'resend'
 
 export const sendEmail = asyncHandler( async (data, req, res) => {
   const transporter = nodemailer.createTransport({
-    host: 'smtp.resend.com',
+    host: 'smtp.google.com',
     secure: true,
     port: 465,
     auth: {
-        user: "resend",
-        pass: process.env.RESEND_API_KEY
+        user: process.env.MAIL_ID,
+        pass: process.env.MAIL_PASSWORD
     }
 })
 
   // send mail with defined transport object
   const info = await transporter.sendMail({
-    from: '"Hey 👻" <onboarding@resend.dev>', // sender address
-    to: "mtonor1368@gmail.com", // list of receivers
+    from: '"Hey 👻" <mtonor1368@gmail.com>', // sender address
+    to: "mdtonor@gmail.com", // list of receivers
     subject: data.subject, // Subject line
     text: data.text, // plain text body
     html: data.htm, // html body
