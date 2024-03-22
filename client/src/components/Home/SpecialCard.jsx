@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { Rating } from 'react-simple-star-rating'
-
+import './productCard.scss'
 const SpecialCard = () => {
   return (
     <div className='special-card'>

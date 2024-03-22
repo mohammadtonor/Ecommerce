@@ -311,6 +311,7 @@ footer:not(:first-child) {
     .blog-card {
         background-color: white;
         max-width: 300px;
+        box-shadow: 0 0 10px #0000001a;
         .card-image {
             img {
                 width: 300px;
@@ -375,6 +376,7 @@ footer:not(:first-child) {
 
     .product-card {
         background-color: white;
+        box-shadow: 0 0 10px #0000001a;
         max-width: 200px;
         display: flex;
         flex-direction: column;
@@ -506,6 +508,7 @@ footer:not(:first-child) {
     gap: 10px;
     justify-content: space-around;
     .special-card {
+        box-shadow: 0 0 10px #0000001a;
         display: flex;
         background-color: white;
         padding: 15px;
@@ -610,6 +613,7 @@ footer:not(:first-child) {
     .famous-card {
         background-color: white;
         padding: 10px;
+        box-shadow: 0 0 10px #0000001a;
 
         &:first-child {
             padding: 0;
@@ -679,3 +683,55 @@ footer:not(:first-child) {
         }
     }
 }
+
+// Our Store 
+.header {
+    align-items: center;
+    width: 100%;
+    background-color: white;
+    .header-item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        span{
+            text-align: center;
+            a {
+                color: var(--color-1b1b1v);
+                text-decoration: none;
+                font-size: 14px;
+                font-weight: 500;
+                &:hover {
+                    color: var(--color-febd69);
+                }
+            }
+        }
+    }
+}
+
+.store-flex {
+    display: grid;
+    grid-template-columns: 2fr 6fr;
+    gap: 10px;
+
+    .store-filter {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        
+    }
+
+    .srore-prod-lists {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+
+        .flex-list-products {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+    }
+}
+
+
+

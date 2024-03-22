@@ -1,0 +1,19 @@
+.filte-category {
+    padding: 0 10px;
+    ul {
+        list-style-type: none;
+        padding: 0;
+        line-height: 20px;
+        font-size: 14px;
+        color: gray;
+        li {
+            text-transform: capitalize;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+        
+        &:last-child {
+            margin-bottom: 0;
+        }  
+    }
+}

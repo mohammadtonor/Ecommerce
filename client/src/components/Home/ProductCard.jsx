@@ -4,9 +4,10 @@ import { Link } from 'react-router-dom';
 import { IoGitCompareOutline, IoCartOutline } from "react-icons/io5";
 import { FaRegEye } from "react-icons/fa6";
 
-const FeaturedCard = () => {
+const FeaturedCard = ({grid}) => {
+    console.log(grid);
   return (
-        <div className="product-card">
+        <Link to={'/'} className={`product-card gr${grid}`} >
             <div className='wishlist-card'>
                 <Link to='/'>
                         <MdFavoriteBorder />
@@ -20,10 +21,12 @@ const FeaturedCard = () => {
                 <span className='brand'>apple</span>
                 <span className='product-title'>Iphone 12 por max 128GB </span>
                 <Rating ratingValue={4} size={20} initialValue={3}/>
+                <p className='product-desc'>Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+                     </p>
                 <h5 className='product-price'>$ 999</h5>
             </div>
             <div className="action-bar">
-                <div className="action-items">
+                <div className="action-items ">
                     
                     <Link to='/'>
                         <IoGitCompareOutline />
@@ -36,7 +39,7 @@ const FeaturedCard = () => {
                     </Link>
                 </div>
             </div>
-        </div>
+        </Link>
 
   )
 }

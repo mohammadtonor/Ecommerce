@@ -1,0 +1,17 @@
+.filter-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+
+    .tag-badge {
+        padding: 5px 10px;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        background-color: #cecaca;
+        color: rgb(105, 103, 103);
+        font-size: 14px;
+        font-weight: normal;
+        text-transform: capitalize;
+    }
+}

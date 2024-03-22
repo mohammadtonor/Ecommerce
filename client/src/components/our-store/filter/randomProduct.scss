@@ -1,0 +1,35 @@
+.random-product {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+
+    .random-card {
+        display: flex;
+        gap: 15px;
+        img {
+            width: 120px;
+            height: 120px;
+        }
+
+        &:first-child{
+            border-bottom: 1px solid lightgray;
+        }
+        .random-card-content {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            h5 {
+                font-size: 14px;
+                font-weight: 600;
+                list-style: 20px;
+                margin-bottom: 0;
+            }
+
+            p {
+                margin-bottom: 10px;
+                font-size: 16px;
+                font-weight: 600;
+            }
+        }
+    }
+}

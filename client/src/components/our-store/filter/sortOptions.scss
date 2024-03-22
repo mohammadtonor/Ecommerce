@@ -1,0 +1,61 @@
+.sort-filter {
+    background-color: white;
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .filter-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        span {
+            font-size: 16px;
+            font-weight: 600;
+            color: gray;
+        }
+
+        .sort-options {
+            text-align: start;
+            width: 200px;
+            padding: 7px;
+            border-radius: 5px;
+            background-color: rgb(230, 224, 224);
+            border: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: gray;
+            
+            &:focus {
+                outline: none;
+            }
+
+            option {
+                margin-top: 10px;
+            }
+        }
+    }
+
+    .filter-right {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+
+        span {
+            margin-right: 10px;
+        }
+        svg {
+            background-color: rgb(209, 208, 208);
+            border-radius: 10px;
+            padding: 6px;
+            cursor: pointer;
+            color: rgb(88, 88, 88);
+        }
+        span {
+            font-size: 14px;
+            color: gray;
+            font-weight: 600;
+        }
+    }
+}

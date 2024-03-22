@@ -36,10 +36,30 @@ const Home = () => {
             <section className="famous-wrapper home-wrapper-2 py-5">
                 <div className="container-xxl">
                     <div className="famous-flex">
-                        <FamousCard imageSrc={'/images/spaeker04.jpg'}/>
-                        <FamousCard imageSrc={'/images/spaeker.jfif'}/>
-                        <FamousCard imageSrc={'/images/spaeker.jfif'}/>
-                        <FamousCard imageSrc={'/images/spaeker.jfif'}/>
+                        <FamousCard
+                            imageSrc={'/images/spaeker04.jpg'}
+                            category={'Blue Screan'}
+                            title='Smart watch Series 7'
+                            price='From $100 or 12.5/month'
+                        />
+                        <FamousCard 
+                            imageSrc={'/images/spaeker.jfif'}
+                            category={'Blue Screan'}
+                            title='Smart watch Series 7'
+                            price='From $100 or 12.5/month'
+                        />
+                        <FamousCard 
+                            imageSrc={'/images/spaeker.jfif'}
+                            category={'Blue Screan'}
+                            title='Smart watch Series 7'
+                            price='From $100 or 12.5/month'
+                        />
+                        <FamousCard 
+                            imageSrc={'/images/spaeker.jfif'}
+                            category={'Blue Screan'}
+                            title='Smart watch Series 7'
+                            price='From $100 or 12.5/month'
+                        />
                     </div>
                 </div>
             </section>
