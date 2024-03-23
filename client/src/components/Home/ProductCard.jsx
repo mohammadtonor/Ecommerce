@@ -5,11 +5,10 @@ import { IoGitCompareOutline, IoCartOutline } from "react-icons/io5";
 import { FaRegEye } from "react-icons/fa6";
 
 const FeaturedCard = ({grid}) => {
-    console.log(grid);
   return (
         <Link to={'/'} className={`product-card gr${grid}`} >
             <div className='wishlist-card'>
-                <Link to='/'>
+                <Link to='/whishlist'>
                         <MdFavoriteBorder />
                 </Link>
             </div>
@@ -28,7 +27,7 @@ const FeaturedCard = ({grid}) => {
             <div className="action-bar">
                 <div className="action-items ">
                     
-                    <Link to='/'>
+                    <Link to='/compare-product'>
                         <IoGitCompareOutline />
                     </Link>
                     <Link to='/'>

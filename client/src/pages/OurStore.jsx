@@ -10,7 +10,7 @@ import { useState } from 'react'
 import ProductCard from './../components/Home/ProductCard';
 
 const OurStore = () => {
-  const [grid, setGrid] = useState(250);
+  const [grid, setGrid] = useState(1);
  
   const gridSetter = (i) => {
     setGrid(i);

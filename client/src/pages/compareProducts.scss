@@ -1,0 +1,112 @@
+.compare-container, .whishlist-product {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 1rem;
+
+    .product-card-compare {
+        background-color: white;
+        background-color: transparent ;
+        border-radius: 10px;
+        position: relative;
+        padding: 15px;
+
+        .product-card__content {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+            width: 100%;
+            padding-left: 10px;
+            gap: 10px;
+            ;
+            .product-card__title {
+                font-size: 14px;
+                font-weight: 600;
+                
+            }
+
+            .product-card__price {
+                font-size: 01rem;
+                font-weight: 600;
+                border-bottom: 1px solid rgb(196, 194, 194);
+                padding-bottom: 5px;
+            }
+
+            .product-card__item {
+                display: flex;
+                justify-content: space-between;
+                font-size: 12px;
+                font-weight: 500;
+                padding-bottom: 15px;
+                border-bottom: 1px solid rgb(192, 188, 188);
+
+                .product-card__color {
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 5px;
+                    align-items: center;
+                    .product-card__color__badge {
+                        width: 20px;
+                        height: 20px;
+                        border-radius: 30px;
+                        padding: 10px;
+
+                        &:nth-child(1) {
+                            background-color: red;
+                        }
+                        &:nth-child(2) {
+                            background-color: yellow;
+                        }
+                        &:nth-child(3) {
+                            background-color: green;
+                        }
+            
+                    }
+                }
+
+                .product-card__size {
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-items: center;
+                    gap: 5px;
+                    color: gray;
+                    
+                }
+
+                &:last-child {
+                    border: none;
+                }
+                span {
+                    &:first-child{
+                        font-size: 14px;
+                        font-weight: 600;
+                    }
+                    &:last-child {
+                        font-size: 13px;
+                        font-weight: 600;
+                        color: gray;
+                    }
+                }
+            }
+            
+        }
+
+        .product-card__image{
+            margin-bottom: 10px;
+            width: 100%;
+            background-color: white;
+            svg {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                font-size: 20px;
+            }
+
+            img {
+                width: 90%;
+                height: 90%;
+                object-fit: cover;
+                border-radius: 10px;
+            }
+        }
+    }
+}

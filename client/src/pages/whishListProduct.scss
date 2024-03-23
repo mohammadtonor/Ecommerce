@@ -1,0 +1,53 @@
+.whishlist {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 1rem;
+
+    .whashlist-card {
+        border-radius: 10px;
+        position: relative;
+        padding: 15px;
+
+
+        .product-card__image{
+            margin-bottom: 10px;
+            width: 100%;
+            background-color: white;
+            svg {
+                position: absolute;
+                top: 8%;
+                right: 8%;
+                font-size: 20px;
+            }
+
+            img {
+                width: 90%;
+                height: 90%;
+                object-fit: cover;
+                border-radius: 10px;
+            }
+        }
+
+        .product-card__content {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+            width: 100%;
+            padding-left: 10px;
+            gap: 10px;
+            
+            .product-card__title {
+                font-size: 14px;
+                font-weight: 600;
+                
+            }
+
+            .product-card__price {
+                font-size: 01rem;
+                font-weight: 600;
+                padding-bottom: 5px;
+                color: gray;
+            }
+        }
+    }
+}
