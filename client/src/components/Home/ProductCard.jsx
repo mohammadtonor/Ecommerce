@@ -6,7 +6,7 @@ import { FaRegEye } from "react-icons/fa6";
 
 const FeaturedCard = ({grid}) => {
   return (
-        <Link to={'/'} className={`product-card gr${grid}`} >
+        <Link to={'/products/id'} className={`product-card gr${grid}`} >
             <div className='wishlist-card'>
                 <Link to='/whishlist'>
                         <MdFavoriteBorder />

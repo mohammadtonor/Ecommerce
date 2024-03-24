@@ -4,12 +4,12 @@
     --color-febd69: #febd69;
 }
 
-.login-container {
+.signup-container {
     display: flex;
     justify-content: center;
     align-items: center;
     
-    .login-cord {
+    .signup-cord {
         width: 45%;
         background-color: white;
         padding: 2rem;
@@ -24,52 +24,28 @@
             color: #777;
         }
 
-        .login-action {
+        .signup-action {
             display: flex;
             justify-content: center;
-            margin-top: 1rem;
             align-items: center;
-            gap: 30px;;
+            margin-top: 10px;
             
             button {
                 padding: 0.4rem 1.3rem;
                 background-color: var(--color-232f3a);
                 color: white;
+                max-width: 150px;
                 font-size: 15px;
                 font-weight: 500;
                 border: none;
                 cursor: pointer;
                 border-radius: 20px;
-                
                 &:hover {
                     background-color: var(--color-febd69);
                     color: #232f3a;
-                }
-                
-                &:last-child {
-                    background-color: var(--color-febd69);
-                    color: var(--color-232f3a);
-                    &:hover {
-                        background-color: var(--color-232f3a);
-                        color: white;
-                    }
-                }
-            };
-
-            a {
-                background-color: var(--color-febd69);
-                color: var(--color-232f3a);
-                text-decoration: none;
-                font-size: 0.9rem;
-                text-align: center;
-                border-radius: 30px;
-                margin-top: 5px;
-                padding: 0.5rem 1.3rem;
-                &:hover {
-                    background-color: var(--color-232f3a);
-                    color: white;
-                }
+                } 
             }
+
             
         }
 

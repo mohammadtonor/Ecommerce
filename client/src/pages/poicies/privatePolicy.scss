@@ -1,0 +1,24 @@
+.policy-card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px #0000001a;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .policy-card-item {
+        h2 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 5px 0;
+        }
+        
+        p {
+            font-size: 0.9rem;
+            color: gray;
+            font-weight: 500;
+            margin: 0;
+        }
+    }
+}

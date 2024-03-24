@@ -23,9 +23,8 @@ const LoginPage = () => {
                             <Link className='link' to='/forgot-password'>Forgot your Password?</Link>
                             
                             <div className='login-action'>
-                            <button>Login</button>
-                            <button>Signup</button>
-
+                                <button>Login</button>
+                                <Link to={'/signup'}>Signup</Link>
                             </div>
                         </form>
                     </div>

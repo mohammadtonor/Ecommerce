@@ -71,11 +71,11 @@ const Footer = () => {
             <div className="footer__grid__item">
                 <h4>Information</h4>
                 <div>
-                    <Link to='/'>Private Policy</Link>
-                    <Link to='/'>Refound Policy</Link>
-                    <Link to='/'>Shipping Policy</Link>
-                    <Link to='/'>Terms & Condition</Link>
-                    <Link to='/'>Blogs</Link>
+                    <Link to='/private-policy'>Private Policy</Link>
+                    <Link to='/refund-policy'>Refound Policy</Link>
+                    <Link to='/shiping-policy'>Shipping Policy</Link>
+                    <Link to='/term-policy'>Terms & Condition</Link>
+                    <Link to='/blogs'>Blogs</Link>
                 </div>
               </div>
             <div className="footer__grid__item">
