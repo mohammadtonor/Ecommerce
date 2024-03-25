@@ -5,16 +5,17 @@ import { FaHome } from "react-icons/fa";
 import { IoMdCall } from "react-icons/io";
 import { MdEmail } from "react-icons/md";
 import { IoInformationCircleOutline } from "react-icons/io5";
+import Container from '../components/Container';
 
 const Contact = () => {
   return (
     <>
       <Meta title='Contact Us'/>
       <BreadCrump title='Contact Us'/>
-      <div className="contact-wrapper home-wrapper-2 py-5">
-        <div className="container-xxl">
+      <Container class1="contact-wrapper home-wrapper-2 py-5">
           <div>
             <iframe 
+              title={"map"}
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15413.506108086172!2d51.16116314477239!3d35.69446809040172!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3f8df07277f96f0b%3A0x50e1f3647d414beb!2sDigikala%20Processing%20Center!5e0!3m2!1sen!2s!4v1711131869808!5m2!1sen!2s"
               height="450" 
               style={{border:0, width: '100%'}} 
@@ -62,9 +63,7 @@ const Contact = () => {
               </div>
             </div>
           </div>
-          
-        </div>
-      </div>
+      </Container>
     </>
   )
 }

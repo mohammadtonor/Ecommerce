@@ -30,7 +30,7 @@ const FilterOptions = () => {
                     type="number" 
                     placeholder='feom'
                     className='form-control'
-                    value={0}
+                    defaultValue={0}
                     min={1}
                     max={1000000}
                 />
@@ -39,7 +39,7 @@ const FilterOptions = () => {
                     type="number" 
                     placeholder='feom'
                     className='form-control'
-                    value={10}
+                    defaultValue={10}
                     min={1}
                     max={1000000}
                 />

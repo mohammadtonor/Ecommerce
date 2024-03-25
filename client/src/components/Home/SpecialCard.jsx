@@ -25,7 +25,7 @@ const SpecialCard = () => {
         </div>
         <div className='product-count'>
           <p>Products: 5</p>
-          <div class="progress">
+          <div className="progress">
             <div 
               class="progress-bar" 
               role="progressbar" 

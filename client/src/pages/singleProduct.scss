@@ -118,6 +118,27 @@
 
             
         }
+
+        .product-accordian {
+            .product-accordian__header {
+                display: flex;
+                align-items: center;
+                font-size: 16px;
+                font-weight: 600;
+                svg {
+                    margin-right: 5px;
+                }
+            }
+
+            .product-accordian__body {
+                margin-top: 5px;
+                padding-left: 10px;
+                font-size: 14px;
+                color: gray;
+                font-weight: 600;
+                cursor: pointer ;
+            }
+        }
     }
     
     .product-quantity {
@@ -180,15 +201,65 @@
             }
         }
 
+        
+
         @media screen and (max-width: 1000px){
             flex-direction: column;
         }
     };
 
+    .product-item-wishlist {
+        display: flex;
+        gap: 10px;
+        a {
+            color: #444;
+            span {
+                font-size: 12px;
+                font-weight: 600px;
+            }
+            svg {
+                margin-right: 5px;
+                font-size: 15px;
+            }
+        }
+    }
+
     .product-image {
-        img {
-            width: 100%;
-            height: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        .main-image {
+            
+                img {
+                    
+                    align-self: center;
+                    width:100% !important;
+                    height: 100% !important;
+                    object-fit: contain;
+                }
+        }
+
+        .other-image {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            div {
+                border: 1px solid #aaaaaa;
+            }
+            img {
+                width: 250px;
+                height: 250px;
+                object-fit: contain;
+            }
+
+            @media  screen and (max-width: 1000px){
+                img {
+                    width: 150px;
+                    height: 150px;
+                    object-fit: contain;
+                }
+            }  
+        
         }
     }
 }

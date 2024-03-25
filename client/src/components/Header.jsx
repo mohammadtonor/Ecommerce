@@ -35,14 +35,14 @@ const Header = () => {
               </h1>
             </div>
             <div className="col-5">
-              <div class="input-group">
+              <div className="input-group">
                   <input 
                     type="text" 
-                    class="form-control" 
+                    className="form-control" 
                     placeholder="Search product Here..." 
                     aria-label="Search product Here..."
                   />
-                  <span class="input-group-text" id="basic-addon2">
+                  <span className="input-group-text" id="basic-addon2">
                     <BsSearch className="fs-6"/>
                   </span>
                 </div>
@@ -87,9 +87,9 @@ const Header = () => {
             <div className="col-12">
               <div className="menu-button d-flex align-items-center gap-4">
                 <div>
-                  <div class="dropdown">
+                  <div className="dropdown">
                       <button
-                        class="btn btn-secondary dropdown-toggle bg-transparent
+                        className="btn btn-secondary dropdown-toggle bg-transparent
                              border-0 text-white d-flex align-items-center gap-2"
                         type="button" 
                         id="dropdownMenuButton1" 
@@ -99,7 +99,7 @@ const Header = () => {
                         <CgMenuGridO className="fs-3"/>
                         <span>Shop Categories</span>
                     </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                       <li>
                         <Link className="dropdown-item" to="#">Action</Link>
                       </li>

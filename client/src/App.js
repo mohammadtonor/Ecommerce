@@ -23,6 +23,8 @@ import RefundPolicy from './pages/poicies/REfundPolicy';
 import TermPolicy from './pages/poicies/TermPolicy';
 import ShipingPolicy from './pages/poicies/ShippingPolicy';
 import SingleProduct from './pages/SingleProduct';
+import Cart from './pages/Cart';
+import Checkout from './pages/Checkout';
 
 function App() {
   return (
@@ -35,6 +37,8 @@ function App() {
             <Route path='contact' element={<Contact />} />
             <Route path='store' element={<OurStore />} />
             <Route path='blogs' element={<Blogs />} />
+            <Route path='cart' element={<Cart />} />
+            <Route path='checkout' element={<Checkout />} />
             <Route path='blogs/:id' element={<SingleBlog /> } />
             <Route path='products/:id' element={<SingleProduct /> } />
             <Route path='compare-product' element={<CompareProducts />} />

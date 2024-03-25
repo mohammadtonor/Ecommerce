@@ -7,34 +7,33 @@ import BlogeCard from '../components/Home/BlogeCard';
 import FeaturedCard from '../components/Home/ProductCard';
 import SpecialCard from '../components/Home/SpecialCard';
 import FamousCard from '../components/Home/FamousCard';
+import Container from '../components/Container';
+import ProductCard from './../components/Home/ProductCard';
 
 const Home = () => {
     return (
         <>
-            <section className='home-wrapper-1 py-5'>
+            <Container class1='home-wrapper-1 py-5'>
                 <HomeBanner /> 
-            </section>
-            <section className='home-wrapper-2 py-5'>
+            </Container>
+            <Container class1='home-wrapper-2 py-5'>
                 <HomeServices />
-            </section>
-            <section className='home-wrapper-3 py-5'>
+            </Container>
+            <Container class1='home-wrapper-3 py-5'>
                 <HomeCategories />
-            </section>
-            <section className='featured-wrapper py-5 home-wrapper-2'>
-                <div className='container-xxl'>
+            </Container>
+            <Container class1='featured-wrapper py-5 home-wrapper-2'>
                     <h1 className='py-2 blog-heading'>Featured Products</h1>
                     <div className="product-flex">
-                        <FeaturedCard />
-                        <FeaturedCard />
-                        <FeaturedCard />
-                        <FeaturedCard />
-                        <FeaturedCard />
-                        <FeaturedCard />
+                        <ProductCard />
+                        <ProductCard />
+                        <ProductCard />
+                        <ProductCard />
+                        <ProductCard />
+                        <ProductCard />
                     </div>
-                </div>   
-            </section>
-            <section className="famous-wrapper home-wrapper-2 py-5">
-                <div className="container-xxl">
+            </Container>
+            <Container class1="famous-wrapper home-wrapper-2 py-5">
                     <div className="famous-flex">
                         <FamousCard
                             imageSrc={'/images/spaeker04.jpg'}
@@ -61,45 +60,38 @@ const Home = () => {
                             price='From $100 or 12.5/month'
                         />
                     </div>
+            </Container>
+            <Container class1='popular-wrapper py-5 home-wrapper-2'>
+                <h1 className='py-2 blog-heading'>Popular Products</h1>
+                <div className="product-flex">
+                    <FeaturedCard />
+                    <FeaturedCard />
+                    <FeaturedCard />
+                    <FeaturedCard />
+                    <FeaturedCard />
+                    <FeaturedCard />
                 </div>
-            </section>
-            <section className='popular-wrapper py-5 home-wrapper-2'>
-                <div className='container-xxl'>
-                    <h1 className='py-2 blog-heading'>Popular Products</h1>
-                    <div className="product-flex">
-                        <FeaturedCard />
-                        <FeaturedCard />
-                        <FeaturedCard />
-                        <FeaturedCard />
-                        <FeaturedCard />
-                        <FeaturedCard />
-                    </div>
-                </div>   
-            </section>
-            <section className="special-wrapper py-5 home-wrapper-2">
-                <div className="container-xxl">
-                    <h1 className="py-2 special-heading">Special Offers</h1>
-                    <div className="special-flex">
-                        <SpecialCard />
-                        <SpecialCard />
-                        <SpecialCard />
-                    </div>
+            </Container>
+            <Container class1="special-wrapper py-5 home-wrapper-2">
+                <h1 className="py-2 special-heading">Special Offers</h1>
+                <div className="special-flex">
+                    <SpecialCard />
+                    <SpecialCard />
+                    <SpecialCard />
                 </div>
-            </section>
-            <section className='home-wrapper-2 py-5'>
+            </Container>
+            <Container class1='home-wrapper-2 py-5'>
                 <HomeMarquee />
-            </section>
-            <section className='blog-wrapper py-5 home-wrapper-2'>
-                <div className='container-xxl'>
-                    <h1 className='py-2 blog-heading'>Latest Blogs</h1>
-                    <div className="blog-flex">
-                        <BlogeCard />
-                        <BlogeCard />
-                        <BlogeCard />
-                        <BlogeCard />
+            </Container>
+            <Container class1='blog-wrapper py-5 home-wrapper-2'>
+                <h1 className='py-2 blog-heading'>Latest Blogs</h1>
+                <div className="blog-flex">
+                    <BlogeCard />
+                    <BlogeCard />
+                    <BlogeCard />
+                    <BlogeCard />
                     </div>
-                </div>   
-            </section>
+            </Container>
             
         </>
     );

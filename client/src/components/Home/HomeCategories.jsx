@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom'
 
 const HomeCategories = () => {
   return (
-    <div className='container'>
-        <div className="container-xxl">
+    
             <div className="row">
                 <div className="col-12">
                     <div className="home-categories">
@@ -83,8 +82,7 @@ const HomeCategories = () => {
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+    
   )
 }
 
