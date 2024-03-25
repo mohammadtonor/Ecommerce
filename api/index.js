@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import morgan from "morgan";
+import path from 'path';
 
 import { dcConnect } from './config/dbConnect.js';
 import { errorHandler, notFound } from './middleware/errorHandler.js';
@@ -17,15 +18,22 @@ import colorRoute from './routes/colorRoute.js';
 import couponRoute from './routes/couponRoute.js';
 import orderRoute from './routes/orderRoute.js';
 import enqRoute from './routes/enqRoute.js';
+import { fileURLToPath } from 'url';
 
 dotenv.config();
 const app = express(); 
 const PORT = process.env.PORT || 4000;
 
+const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
+const __dirname = path.dirname(__filename);
+
 app.use(morgan("dev"));
 
 app.use(express.json());
 app.use(cookieParser());
+
+app.use(express.static(path.join(__dirname, "../client/build")));
+
 
 app.use('/api/auth', authRouter);
 app.use('/api/users', userRouter);
@@ -41,6 +49,10 @@ app.use('/api/enquiry', enqRoute);
 
 app.use(notFound)
 app.use(errorHandler)
+
+app.get("*", (req , res ) => {
+    res.sendFile(path.join(__dirname, "../client/build/index.html"))
+});
 
 app.listen(PORT, () => {
     dcConnect();
