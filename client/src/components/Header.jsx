@@ -50,19 +50,19 @@ const Header = () => {
             <div className="col-5 mt-2">
               <div className="header-upper-links d-flex align-item-center justify-content-between">
                 <div>
-                  <Link to={'/cart'} className="d-flex">
+                  <Link to={'/compare-product'} className="d-flex">
                     <IoGitCompareOutline className="fs-3 mt-1"/>
                     <p>Compare <br /> Products</p>
                   </Link>
                 </div>
                 <div>
-                  <Link to={'/cart'} className="d-flex">
+                  <Link to={'/wishlist'} className="d-flex">
                     <MdFavoriteBorder   className="fs-3 mt-1"/>
                     <p>Favorite <br /> Wishlist</p>
                   </Link>
                 </div>
                 <div>
-                  <Link to={'/cart'} className="d-flex">
+                  <Link to={'/login'} className="d-flex">
                     <FaRegUser  className="fs-3 mt-1"/>
                     <p>User <br /> Profile</p>
                   </Link>
