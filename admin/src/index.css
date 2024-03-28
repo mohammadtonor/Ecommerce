@@ -1,4 +1,15 @@
 
+:root {
+  --color-212529: #212529;
+  --color-ffd333: #ffd333;
+  --color-47ad24: #47ad24;
+  --color-e52e2e: #e52e2e;
+  --color-828599: #828599;
+  --color-3d464d: #ed464d;
+  --color-c3d4da: #ced4da;
+}
+
+
 .trigger {
     padding: 0 24px;
     font-size: 18px;
@@ -11,15 +22,143 @@
     color: #1890ff;
   }
 
+.ant-layout-sider{
+  top: 0;
+  
+}
+
+.ant-layout-sider,
+.ant-layout-sider-trigger{
+  max-width: 250px !important;
+  min-width: 250px !important;
+
+}
+
+.ant-layout-sider-collapsed,
+.ant-layout-sider-collapsed .ant-layout-sider-trigger {
+  max-width: 80px !important;
+  min-width: 80px !important;
+
+}
+
+.red {
+  color: var(--color-e52e2e);
+}
+
+.green {
+  color: var(--color-47ad24);
+}
+
+.logo {
+    margin: 0px;
+    background: #ffd333;
+    height: 64px;
+    display: flex;
+    color: white;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: 600;
+}
 
 
+main {
+  height: 85vh;
+  overflow-y: scroll;
+  background-color: transparent !important;
+}
+main::-webkit-scrollbar {
+  width: 0px;
+}
 
-.demo-logo-vertical {
-    height: 32px;
-    margin: 16px;
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 5px;
-  }
-  .ant-layout {
-    min-height: 100vh;
-  }
+.ant-layout {
+   min-height: 100vh;
+}
+
+main div {
+  background-color: transparent;
+}
+
+
+.ant-spin-container{
+  display: flex;
+  align-items: end !important;
+}
+
+.panel-layout-content{
+  padding: 8px 20px !important;
+}
+
+.quill{
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  background-color: white;
+}
+
+.ql-toolbar {
+  align-items: start !important;
+  justify-content: flex-start !important;
+}
+
+.ql-container  {
+  width: 100%;
+}
+.ql-editor {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: start !important;
+}
+
+.ql-toolbar{
+  width: 100%;
+  display: flex !important
+}
+
+.ql-toolbar>p{
+  text-align: left;
+  align-items: start;
+}
+
+.add-blog-button{
+  margin-top: 40px;
+  background-color: rgb(2, 110, 69);
+  color: white;
+  border: 0;
+  padding: 10px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 5px;
+}
+
+.select-input{
+  margin-top:30px !important;
+}
+
+.ant-select-selector{
+  height: 50px !important;
+}
+
+.title {
+  font-size: 28px;
+  font-family: Roboto !important;
+}
+
+.ant-dropdown-trigger {
+  color: var(--color-828599);
+  font-weight: 600;
+}
+
+.ant-dropdown-menu-title-content{
+  display: flex !important;
+  gap: 10px !important;
+  color: var(--color-212529);
+}
+
+.ant-dropdown-menu-title-content a  {
+  text-decoration: none;
+}

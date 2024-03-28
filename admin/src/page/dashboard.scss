@@ -1,0 +1,173 @@
+:root {
+    --color-47ad24: #47ad24;
+    --color-e52e2e: #e52e2e;
+    
+  }
+.ant-layout {
+    main{
+        div {
+            div {
+                div {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    .dashboard-card-item-button {
+                        background-color: #ffd333;
+                        transition: all 0.3s;
+                        padding: 0px 20px;
+                        text-align: center;
+                        font-size: 20px !important;
+                        line-height: 15px !important;
+                        font-weight: 600;
+                        color: white;
+                        height: 50px;
+                        border: none;
+                    }
+                }
+
+                .dashboard-card-items {
+                    display: flex;
+                    justify-content: space-between;
+                    border-radius: 10px;
+                    margin-top: 15px;
+                    gap: 20px;
+
+                    @media screen and (max-width: 1000px){
+                        flex-wrap: wrap;
+                    }
+                    div {
+                        background-color: white;
+                        border-radius: 10px;
+                        padding: 5px;
+                        overflow: hidden;
+                        width: 30%;
+                        display: flex;
+                        flex-shrink: 1;
+                        flex-grow: 1;
+                        @media screen and (max-width: 900px){
+                            width: 48%;
+                        }
+                        @media screen and (max-width: 700px){
+                            width: 100%;
+                        }
+                        .dashboard-card-item-left {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 20px;
+                            max-width: 200px;
+                            padding: 10px;
+                            justify-content: space-between;
+                            h3 {
+                                text-align: left;
+                                line-height: 20px;
+                                font-size: 20px;
+                                font-weight: 600;
+                                color: gray;
+                                min-width: 120px;
+                                margin: 0;
+                                padding: 0;
+                            }
+
+                            p{
+                                min-width: 120px;
+                                font-size: 20px;
+                                font-weight: 600;
+                                text-align: left;
+                                margin: 0;
+                                padding-top: 10px;
+                            }
+                        }
+
+                        .dashboard-card-item-right {
+                            display: flex;
+                            flex-direction: column;
+                            gap: 20px;
+                            align-items: end;
+                            justify-content: end;
+                            padding: 10px;
+                            justify-content: space-between;
+                            h3 {
+                                line-height: 20px;
+                                font-size: 20px;
+                                font-weight: 600;
+                                color: gray;
+                                min-width: 120px;
+                                text-align: right;
+                                margin: 0;
+                            }
+                            .red {
+                                color: var(--color-e52e2e);
+                              }
+
+                              .green {
+                                color: var(--color-47ad24);
+                              }
+
+                            p{
+                                min-width: 120px;
+                                font-size: 14px;
+                                font-weight: 600;
+                                text-align: right;
+                                line-height: 20px;
+                                margin: 0;color: gray;
+                            }
+                        }
+                    }
+                    
+                    .dashboard-card-item-icon {
+                        font-size: 40px;
+                        color: #ffd333;
+                    }
+                    .dashboard-card-item-title {
+                        font-size: 20px;
+                        font-weight: 600;
+                        margin-top: 10px;
+                    }
+                    .dashboard-card-item-number {
+                        font-size: 30px;
+                        font-weight: 600;
+                        margin-top: 10px;
+                    }
+                }
+
+                .dashboard-chart {
+                    margin-top: 20px;
+                    display: flex;
+                    flex-direction: column;
+
+                    h3 {
+                        text-align: left;
+                        width: 100%;
+                        margin-bottom: 20px;
+                    }
+
+                    div{
+                        width: 100%;
+                    }
+                }
+
+                .dashboard-table {
+                    margin-top: 20px;
+                    display: flex;
+                    flex-direction: column;
+
+                    h3 {
+                        width: 100%;
+                        text-align: left;
+                        margin-top: 10px;
+                    }
+
+                    div{
+                        margin-top: 5px;
+                        width: 100%;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: end;
+
+                    }
+        
+                }
+            }
+        }
+    }
+}

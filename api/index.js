@@ -50,8 +50,8 @@ app.use('/api/enquiry', enqRoute);
 app.use(notFound)
 app.use(errorHandler)
 
-app.get("*", (req , res ) => {
-    res.sendFile(path.join(__dirname, "../client/build/index.html"))
+app.get("/admin/index/*", (req , res ) => {
+    res.sendFile(path.join(__dirname, "../admin/build/index.html"))
 });
 
 app.listen(PORT, () => {
