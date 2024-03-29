@@ -1,5 +1,10 @@
 import { Table } from 'antd';
-import React from 'react'
+import React, { useEffect } from 'react'
+import {useDispatch, useSelector} from 'react-redux';
+import {getColors} from './../features/colors/ColorSlice';
+import { Link } from 'react-router-dom';
+import { FaEdit } from 'react-icons/fa';
+import { MdDelete } from 'react-icons/md';
 
 const columns = [
     {
@@ -7,16 +12,12 @@ const columns = [
       dataIndex: "key",
     },
     {
-      title: "Name",
-      dataIndex: "name",
+      title: "Title",
+      dataIndex: "title",
     },
     {
-      title: "Product",
-      dataIndex: "product",
-    },
-    {
-      title: "Status",
-      dataIndex: "staus",
+      title: 'Action',
+      dataIndex: "action",
     },
   ];
   const data1 = [];
@@ -29,6 +30,30 @@ const columns = [
     });
   }
 const Colors = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getColors());
+  }, []);
+  const colorState = useSelector(state => state.color.colors);
+  const data1 = [];
+  console.log(colorState);
+  for (let i = 0; i < colorState.length ; i++) {
+    data1.push({
+      title:colorState[i].title,
+      key: i + 1,
+      action: (
+        <>
+          <Link to='/' className='table-action'>
+            <FaEdit size={20} />
+          </Link>
+          <Link to='/' className='table-action'>
+            <MdDelete size={20} />
+          </Link>
+        </>
+      ),
+    });
+  }
   return (
     <div className='blogs-container'>
         <h3>Colors</h3>

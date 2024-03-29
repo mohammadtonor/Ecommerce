@@ -53,7 +53,7 @@ const { Header, Sider, Content, Footer } = Layout;
       getItem("Add Blog Category", "blog-category/new",  <ImBlog  className='fs-4'/>),
       getItem("Blog category List", "blogs-category",  <ImBlog className='fs-4'/>),
     ]),
-    getItem("Enquries", "enquaries", <FaClipboard className='fs-4'/>),
+    getItem("Enquries", "enquary", <FaClipboard className='fs-4'/>),
   ];
 
   const widgetMenu = (

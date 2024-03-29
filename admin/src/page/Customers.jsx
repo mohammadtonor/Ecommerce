@@ -2,6 +2,9 @@ import { Table } from 'antd';
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { getUsers } from '../features/customers/customerSlice';
+import { Link } from 'react-router-dom';
+import { FaEdit } from 'react-icons/fa';
+import { MdDelete } from 'react-icons/md';
 
 const columns = [
     {
@@ -11,6 +14,7 @@ const columns = [
     {
       title: "Full Name",
       dataIndex: "name",
+      sorter: (a,b) => a.name.length - b.name.length
     },
     {
       title: "Email",
@@ -19,6 +23,10 @@ const columns = [
     {
       title: "Mobile",
       dataIndex: "mobile",
+    },
+    {
+      title: 'Action',
+      dataIndex: "action",
     },
   ];
    
@@ -35,7 +43,17 @@ const Custumers = () => {
       key: i + 1,
       name: customersState[i].firstName + " " + customersState[i].lastName,
       email: customersState[i].email,
-      mobile: customersState[i].mobile
+      mobile: customersState[i].mobile,
+      action: (
+        <>
+          <Link to='/' className='table-action'>
+            <FaEdit size={20} />
+          </Link>
+          <Link to='/' className='table-action'>
+            <MdDelete size={20} />
+          </Link>
+        </>
+      ),
     })
   }
   return (

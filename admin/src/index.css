@@ -166,3 +166,22 @@ main div {
 .error {
   color: var(--color-3d464d) !important;
 }
+
+.ant-table-column-sorters {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: start !important;
+}
+
+.ant-table-cell:first-child {
+  width: 3% !important;
+}
+
+.ant-table-row:last-child {
+  width: 100px !important;
+}
+
+.table-action{
+  margin-right: 5px;
+  color: var(--color-e52e2e);
+}

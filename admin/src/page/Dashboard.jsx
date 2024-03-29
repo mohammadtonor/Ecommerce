@@ -87,6 +87,7 @@ const data = [
 ];
 const Dashboard = () => {
   const {user} = useSelector(state => state.auth);
+  console.log(user);
   const navigate = useNavigate();
 
   const config = {
@@ -119,7 +120,7 @@ const Dashboard = () => {
   };
   
   useEffect(() => {
-    if(user._id === null) {
+    if(user?._id === null) {
       return navigate('/login')
     }
   })

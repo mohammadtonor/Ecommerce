@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {user, isSuccess} = useSelector((state) => state.auth)
+  const {isSuccess} = useSelector((state) =>state.auth)
   useEffect(()=> {
     if(isSuccess) {
       navigate('/admin')

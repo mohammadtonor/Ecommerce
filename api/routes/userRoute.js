@@ -5,7 +5,7 @@ import { authMiddleware, isAdmin } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-router.get('/', getAllUser);
+router.get('/get-all', getAllUser);
 router.post('/forgot-password-token', forgotPasswordToken);
 router.put('/reset-password/:token', resetePassword);
 router.put('/save-address', authMiddleware, saveAdress);

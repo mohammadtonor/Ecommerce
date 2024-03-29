@@ -1,5 +1,10 @@
 import { Table } from 'antd';
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import {getProducts} from './../features/products/ProductSlice';
+import {Link} from 'react-router-dom';
+import { FaEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 
 const columns = [
     {
@@ -7,28 +12,77 @@ const columns = [
       dataIndex: "key",
     },
     {
-      title: "Name",
-      dataIndex: "name",
+      title: "Image",
+      dataIndex: "image",
     },
     {
-      title: "Product",
-      dataIndex: "product",
+      title: "Title",
+      dataIndex: "title",
+      sorter: (a,b) => a.title.length - b.title.length
     },
     {
-      title: "Status",
-      dataIndex: "staus",
+      title: "Price",
+      dataIndex: "price",
+      sorter: (a,b) => a.price - b.price
+    },
+    {
+      title: "Category",
+      dataIndex: "category",
+      sorter: (a,b) => a.category.length - b.category.length
+    },
+    {
+      title: "Brand",
+      dataIndex: "brand",
+      sorter: (a,b) => a.brand && b.brand && a.brand.length - b.brand.length
+    },
+    {
+      title: "Color",
+      dataIndex: "color",
+    },
+    {
+      title: "Action",
+      dataIndex: "action",
     },
   ];
+  
+const ProductList = () => {
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    dispatch(getProducts())
+  } , [])
+  const productState = useSelector(state => state.product.products);
   const data1 = [];
-  for (let i = 0; i < 46; i++) {
+  for (let i = 0; i < productState.length ; i++) {
     data1.push({
-      key: i,
-      name: `Edward King ${i}`,
-      product: 32,
-      staus: `London, Park Lane no. ${i}`,
+      image: productState[i].images !== undefined 
+      && productState[i].images.length > 0 
+      &&  <img width={40} height={40} src={ productState[i].images[0].url}/>,
+      title: productState[i]?.title,
+      category:productState[i].category,
+      price: productState[i].price,
+      brand:productState[i].brand,
+      color:productState[i].color !== undefined 
+      && productState[i].color.length > 0 
+      && productState[i].color.reduce((acc, cur, indx) => {
+        if (indx === productState[i].color.length - 1) {
+          return acc.concat(cur.title)
+        }
+        return acc.concat(cur.title, ', ')
+      }, ''),
+      action: (
+        <>
+          <Link to='/' className='table-action'>
+            <FaEdit size={20} />
+          </Link>
+          <Link to='/' className='table-action'>
+            <MdDelete size={20} />
+          </Link>
+        </>
+      ),
+      key: i + 1,
     });
   }
-const ProductList = () => {
   return (
     <div className='blogs-container'>
         <h3>Product List</h3>

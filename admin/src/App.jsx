@@ -9,7 +9,7 @@ import ResetPassword from './page/ResetPassword';
 import ForgotPassword from './page/ForgotPassword';
 import MainLayout from './components/Layout/MainLayout';
 import Dashborad from './page/Dashboard';
-import Enquaries from './page/Enquaries';
+import Enquaries from './page/Enquary';
 import BlogList from './page/BlogList';
 import BlogsCategory from './page/BlogtsCategory';
 import OrdersList from './page/OrdersList';
@@ -34,7 +34,7 @@ function App() {
         <Route path="/admin/forgot-password" element={<ForgotPassword />} />
         <Route path="/admin" element={<MainLayout />}>
           <Route index element={<Dashborad />}/>
-          <Route path='enquaries' element={<Enquaries />}/>
+          <Route path='enquary' element={<Enquaries />}/>
           <Route path='blogs' element={<BlogList />}/>
           <Route path='blogs/new' element={<AddBlog />}/>
           <Route path='blogs-category' element={<BlogsCategory />}/>

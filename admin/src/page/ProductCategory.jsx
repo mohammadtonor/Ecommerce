@@ -1,34 +1,48 @@
 import { Table } from 'antd';
-import React from 'react'
-
+import React, { useEffect } from 'react'
+import {useDispatch, useSelector} from 'react-redux'
+import {getcategories} from './../features/category/categorySlice';
+import { Link } from 'react-router-dom';
+import { FaEdit } from 'react-icons/fa';
+import { MdDelete } from 'react-icons/md';
 const columns = [
     {
       title: "SNo",
       dataIndex: "key",
     },
     {
-      title: "Name",
-      dataIndex: "name",
+      title: "Title",
+      dataIndex: "title",
     },
     {
-      title: "Product",
-      dataIndex: "product",
-    },
-    {
-      title: "Status",
-      dataIndex: "staus",
+      title: 'Action',
+      dataIndex: "action",
     },
   ];
+  
+const ProductCategory = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getcategories());
+  }, []);
+  const categoriesState = useSelector(state => state.category.categories);
   const data1 = [];
-  for (let i = 0; i < 46; i++) {
+  for (let i = 0; i < categoriesState.length; i++) {
     data1.push({
-      key: i,
-      name: `Edward King ${i}`,
-      product: 32,
-      staus: `London, Park Lane no. ${i}`,
+      key: i + 1,
+      title:categoriesState[i].name,
+      action: (
+        <>
+          <Link to='/' className='table-action'>
+            <FaEdit size={20} />
+          </Link>
+          <Link to='/' className='table-action'>
+            <MdDelete size={20} />
+          </Link>
+        </>
+      ),
     });
   }
-const ProductCategory = () => {
   return (
     <div className='blogs-container'>
         <h3>Product Category</h3>

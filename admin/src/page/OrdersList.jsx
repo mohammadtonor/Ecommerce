@@ -1,22 +1,32 @@
 import { Table } from 'antd';
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import {getOrders} from './../features/auth/authSlice';
+import {Link} from 'react-router-dom';
+import { FaEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
+
 
 const columns = [
     {
-      title: "SNo",
+      title: "SNO",
       dataIndex: "key",
     },
     {
-      title: "Name",
-      dataIndex: "name",
-    },
-    {
-      title: "Product",
-      dataIndex: "product",
+      title: "Products",
+      dataIndex: "products",
     },
     {
       title: "Status",
-      dataIndex: "staus",
+      dataIndex: "status",
+    },
+    {
+      title: "OrderBy",
+      dataIndex: "orderBy",
+    },
+    {
+      title: "Action",
+      dataIndex: "action",
     },
   ];
   const data1 = [];
@@ -29,6 +39,38 @@ const columns = [
     });
   }
 const OrdersList = () => {
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    dispatch(getOrders())
+  } , [])
+  const orderState = useSelector(state => state.auth.orders);
+  const data1 = [];
+  for (let i = 0; i < orderState?.length ; i++) {
+    data1.push({
+      products: orderState[i]?.products?.length > 0 
+      && orderState[i].products.reduce((acc, cur, indx) => {
+        if (indx === orderState[i].products.length - 1) {
+          return acc.concat(`${cur.product.title} NO ${cur.count}`)
+        }
+        return acc.concat(`${cur.product.title} NO ${cur.count}`, ', ')
+      }, ''),
+      status: orderState[i].orderStatus,
+      totlaPrice: orderState[i].paymentIntent.amount,
+      orderBy: orderState[i].orderBy.firstName + " " + orderState[i].orderBy.lastName,
+      action: (
+        <>
+          <Link to='/' className='table-action'>
+            <FaEdit size={20} />
+          </Link>
+          <Link to='/' className='table-action'>
+            <MdDelete size={20} />
+          </Link>
+        </>
+      ),
+      key: i + 1,
+    });
+  }
   return (
     <div className='blogs-container'>
         <h3>Orders</h3>

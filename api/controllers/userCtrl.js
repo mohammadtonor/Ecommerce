@@ -432,6 +432,8 @@ export const updatePassword = asyncHandler(async (req, res) => {
     validateMongodbId(_id);
     try {
         const orders = await Order.find({ orderBy: _id})
+            .populate('orderBy products.product',
+                ['title', 'price','firstName','lastName', 'product._id', 'orderBy._id'])
         res.json(orders);
     } catch (error) {
         throw new Error(error)
