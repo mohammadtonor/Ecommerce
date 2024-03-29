@@ -29,10 +29,10 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/admin" element={<Login />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/admin/reset-password" element={<ResetPassword />} />
         <Route path="/admin/forgot-password" element={<ForgotPassword />} />
-        <Route path="/" element={<MainLayout />}>
+        <Route path="/admin" element={<MainLayout />}>
           <Route index element={<Dashborad />}/>
           <Route path='enquaries' element={<Enquaries />}/>
           <Route path='blogs' element={<BlogList />}/>

@@ -42,7 +42,7 @@ function App() {
             <Route path='blogs/:id' element={<SingleBlog /> } />
             <Route path='products/:id' element={<SingleProduct /> } />
             <Route path='compare-product' element={<CompareProducts />} />
-            <Route path='whishlist' element={<WhishlistProduct />} />
+            <Route path='wishlist' element={<WhishlistProduct />} />
             <Route path='login' element={<LoginPage />} />
             <Route path='signup' element={<Signup />} />
             <Route path='forgot-password' element={<ForgotPassword /> } />

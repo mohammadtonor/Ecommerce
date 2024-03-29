@@ -59,7 +59,14 @@ export const loginUser = asyncHandler(async (req, res) => {
             maxAge: 72 * 60 * 60 * 1000,
         })
         const {password, __v,  ...restUser} = user._doc;
-        res.status(200).json({ token: generateToken(restUser._id)});
+        res.status(200).json({
+            _id: restUser._id,
+            firstName: restUser.firstName,
+            lastName: restUser.lastName,
+            email: restUser.email,
+            mobile: restUser.mobile,
+            token: generateToken(restUser._id)
+        });
     } catch (error) {
         throw new Error(error)
     }
@@ -94,7 +101,14 @@ export const loginAdmin = asyncHandler(async (req, res) => {
             maxAge: 72 * 60 * 60 * 1000,
         })
         const {password, __v,  ...restUser} = findAdmin._doc;
-        res.status(200).json({ token: generateToken(restUser._id)});
+        res.status(200).json({ 
+            _id: restUser._id,
+            firstName: restUser.firstName,
+            lastName: restUser.lastName,
+            email: restUser.email,
+            mobile: restUser.mobile,
+            token: generateToken(restUser._id)
+        });
     } catch (error) {
         throw new Error(error)
     }
@@ -142,7 +156,8 @@ export const logoutUser = asyncHandler( async (req, res) => {
 
 export const getAllUser =asyncHandler (async (req, res) => {
     try {
-        const users = await User.find();
+        const users = await User.find()
+            .select(['firstName', 'lastName', 'email', 'mobile']);
         res.status(200).json(users);
     } catch (error) {
         throw new Error(error);

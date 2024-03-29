@@ -3,6 +3,9 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { IoMdTrendingUp, IoMdTrendingDown } from "react-icons/io";
 import { Column } from "@ant-design/plots";
 import { Table } from "antd";
+import { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 const columns = [
   {
@@ -83,7 +86,9 @@ const data = [
   },
 ];
 const Dashboard = () => {
-  
+  const {user} = useSelector(state => state.auth);
+  const navigate = useNavigate();
+
   const config = {
     data,
     xField: "type",
@@ -112,6 +117,13 @@ const Dashboard = () => {
       },
     },
   };
+  
+  useEffect(() => {
+    if(user._id === null) {
+      return navigate('/login')
+    }
+  })
+
   return (
     <div className="dashboard-card">
       <div className='dashboard-card-top'>

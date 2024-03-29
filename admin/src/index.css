@@ -162,3 +162,7 @@ main div {
 .ant-dropdown-menu-title-content a  {
   text-decoration: none;
 }
+
+.error {
+  color: var(--color-3d464d) !important;
+}
