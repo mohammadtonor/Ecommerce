@@ -439,3 +439,14 @@ export const updatePassword = asyncHandler(async (req, res) => {
         throw new Error(error)
     }
   })
+
+  export const getAllOrders = asyncHandler(async(req, res) => {
+    try {
+        const orders = await Order.find()
+            .populate('orderBy products.product',
+                ['title', 'price','firstName','lastName', 'product._id', 'orderBy._id'])
+        res.json(orders);
+    } catch (error) {
+        throw new Error(error)
+    }
+  })

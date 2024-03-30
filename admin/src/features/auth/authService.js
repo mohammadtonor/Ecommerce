@@ -35,7 +35,7 @@ const logout = async (userData) => {
 }
 
 const getOrders = async () => {
-    const response = await axios.get(`${BASE_URL}users/get-orders`, config)
+    const response = await axios.get(`${BASE_URL}users/getAll-orders`, config)
     return response.data;
 };
 

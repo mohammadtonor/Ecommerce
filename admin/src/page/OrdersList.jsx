@@ -5,7 +5,7 @@ import {getOrders} from './../features/auth/authSlice';
 import {Link} from 'react-router-dom';
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
-
+import {format} from 'date-fns';
 
 const columns = [
     {
@@ -23,6 +23,10 @@ const columns = [
     {
       title: "OrderBy",
       dataIndex: "orderBy",
+    },
+    {
+      title: "Date",
+      dataIndex: "date",
     },
     {
       title: "Action",
@@ -58,6 +62,7 @@ const OrdersList = () => {
       status: orderState[i].orderStatus,
       totlaPrice: orderState[i].paymentIntent.amount,
       orderBy: orderState[i].orderBy.firstName + " " + orderState[i].orderBy.lastName,
+      date: format(orderState[i].createdAt, "EEE dd MMM yyyy 'T' HH:mm bb"),
       action: (
         <>
           <Link to='/' className='table-action'>

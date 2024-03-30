@@ -1,5 +1,5 @@
 import express, { application } from 'express';
-import { AddToCard, DeleteUserById, applyCoupon, blockUser, emptyCart, forgotPasswordToken, getAllUser, getUserById, getUserCart, getUserOrders, getWishList, handleRefreshToken, resetePassword, saveAdress, unblockUser, updatePassword, updateUserById } from '../controllers/userCtrl.js';
+import { AddToCard, DeleteUserById, applyCoupon, blockUser, emptyCart, forgotPasswordToken, getAllOrders, getAllUser, getUserById, getUserCart, getUserOrders, getWishList, handleRefreshToken, resetePassword, saveAdress, unblockUser, updatePassword, updateUserById } from '../controllers/userCtrl.js';
 import { authMiddleware, isAdmin } from '../middleware/authMiddleware.js';
 
 
@@ -15,6 +15,7 @@ router.get('/get-cart', authMiddleware, getUserCart);
 router.get('/empty-cart', authMiddleware, emptyCart);
 router.put('/apply-coupon', authMiddleware, applyCoupon);
 router.get('/get-orders', authMiddleware, getUserOrders);
+router.get('/getAll-orders', authMiddleware, getAllOrders);
 
 router.get('/:id',authMiddleware,isAdmin, getUserById);
 router.delete('/:id', DeleteUserById);
