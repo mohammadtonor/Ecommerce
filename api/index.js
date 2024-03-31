@@ -17,6 +17,7 @@ import colorRoute from './routes/colorRoute.js';
 import couponRoute from './routes/couponRoute.js';
 import orderRoute from './routes/orderRoute.js';
 import enqRoute from './routes/enqRoute.js';
+import uploadRoute from './routes/uploadRoute.js';
 import cors from 'cors'
 
 dotenv.config();
@@ -45,6 +46,7 @@ app.use('/api/colors', colorRoute);
 app.use('/api/coupons', couponRoute);
 app.use('/api/orders', orderRoute);
 app.use('/api/enquiry', enqRoute);
+app.use('/api/upload', uploadRoute);
 
 app.use(notFound)
 app.use(errorHandler)

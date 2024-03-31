@@ -19,10 +19,7 @@ const productSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    category: {
-        type: String,
-        required: true
-    },
+    category: { type: ObjectId, ref: "Category" },
     images: [],
     quantity: {
         type: Number,
@@ -33,10 +30,7 @@ const productSchema = new mongoose.Schema({
         default: 0,
         select: false
     },
-    brand: {
-        type: String,
-        enum: ["Apple", "Lenovo", "Asuss", "HP"]
-    }
+    brand: { type: ObjectId, ref: "Brand" }
     ,
     color: [{ type: ObjectId, ref: "Color" }],
     rating: [{

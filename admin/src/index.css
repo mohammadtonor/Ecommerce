@@ -90,8 +90,6 @@ main div {
 }
 
 .quill{
-  margin-top: 20px;
-  margin-bottom: 20px;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -141,6 +139,7 @@ main div {
 
 .ant-select-selector{
   height: 50px !important;
+  width: 100% !important;
 }
 
 .title {
@@ -151,6 +150,10 @@ main div {
 .ant-dropdown-trigger {
   color: var(--color-828599);
   font-weight: 600;
+}
+.ant-select-selection-overflow {
+  display: flex !important;
+  justify-content: start !important;
 }
 
 .ant-dropdown-menu-title-content{
@@ -164,6 +167,7 @@ main div {
 }
 
 .error {
+  margin-top: 5px !important;
   color: var(--color-3d464d) !important;
 }
 
@@ -184,4 +188,24 @@ main div {
 .table-action{
   margin-right: 5px;
   color: var(--color-e52e2e);
+}
+.upload-dropzone{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  border: 2px dashed var(--color-c3d4da);
+  border-radius: 5px;
+  background-color: white;
+  color: var(--color-212529);
+}
+
+.upload-dropzone> div {
+  display: flex;
+  flex-direction: column;
+}
+
+.upload-dropzone> div svg {
+  color: #1890ff;
 }

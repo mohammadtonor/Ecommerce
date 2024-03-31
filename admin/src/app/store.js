@@ -11,7 +11,7 @@ import categoryReducer from './../features/category/categorySlice';
 import blogsReducer from './../features/blogs/BlogsSlice';
 import BCategoryReducer from './../features/blogCategory/BcategorySlice';
 import enqReducer from './../features/enquary/enqSlice';
-
+import uploadReducer from './../features/upload/uploadSlice';
 const rootReducer = combineReducers({
   auth: authReducer,
   customer: customerReducer,
@@ -22,6 +22,7 @@ const rootReducer = combineReducers({
   blog: blogsReducer,
   bCategory: BCategoryReducer,
   enquary: enqReducer,
+  upload: uploadReducer
 });
 
 const persistConfig = {
