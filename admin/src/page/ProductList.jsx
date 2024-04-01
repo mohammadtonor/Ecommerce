@@ -48,10 +48,11 @@ const columns = [
 const ProductList = () => {
   const dispatch = useDispatch();
   
+  const productState = useSelector(state => state.product.products);
   useEffect(() => {
     dispatch(getProducts())
-  } , [])
-  const productState = useSelector(state => state.product.products);
+  } , []);
+  
   const data1 = [];
   for (let i = 0; i < productState.length ; i++) {
     data1.push({
@@ -59,15 +60,15 @@ const ProductList = () => {
       && productState[i].images.length > 0 
       &&  <img width={40} height={40} src={ productState[i].images[0].url}/>,
       title: productState[i]?.title,
-      category:productState[i].category,
+      category:productState[i].category?.name,
       price: productState[i].price,
-      brand:productState[i].brand,
-      color:productState[i].color !== undefined 
-      && productState[i].color.length > 0 
-      && productState[i].color.reduce((acc, cur, indx) => {
-        if (indx === productState[i].color.length - 1) {
+      brand:productState[i].brand?.title,
+      color:productState[i].colors.length > 0 
+      && productState[i].colors.reduce((acc, cur, indx) => {
+        if (indx === productState[i].colors.length - 1) {
           return acc.concat(cur.title)
         }
+        console.log(cur);
         return acc.concat(cur.title, ', ')
       }, ''),
       action: (

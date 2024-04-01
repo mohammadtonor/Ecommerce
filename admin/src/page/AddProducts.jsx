@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react'
+import {useNavigate} from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import CustomInput from '../components/CustomInput'
 import ReactQuill from 'react-quill'
 import { Select } from 'antd';
 import { InboxOutlined } from '@ant-design/icons';
-import { message, Upload } from 'antd';
+import { message } from 'antd';
 import { useFormik } from 'formik';
 import { array, number, object, string } from 'yup';
 import { getcategories } from '../features/category/categorySlice';
@@ -14,40 +15,30 @@ import { addProduct } from '../features/products/ProductSlice';
 import Dropzone from 'react-dropzone';
 import { deleteImage, uploadImage } from '../features/upload/uploadSlice';
 
-const { Dragger } = Upload;
-const props = {
-  name: 'file',
-  multiple: true,
-  action: 'https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188',
-  onChange(info) {
-    const { status } = info.file;
-    if (status !== 'uploading') {
-      console.log(info.file, info.fileList);
-    }
-    if (status === 'done') {
-      message.success(`${info.file.name} file uploaded successfully.`);
-    } else if (status === 'error') {
-      message.error(`${info.file.name} file upload failed.`);
-    }
-  },
-  onDrop(e) {
-    console.log('Dropped files', e.dataTransfer.files);
-  },
-};
-
 const AddProducts = () => {
   const dispatch = useDispatch();
-  const productState = useSelector(state => state.product.products);
+  const navigate = useNavigate();
   
   useEffect(() => {
     dispatch(getcategories());
     dispatch(getBrands());
     dispatch(getColors());
-  }, [dispatch]);
+    
+  }, []);
+
+  const imagesState = useSelector(state => state.upload.images); 
+  
+
   const categoryState = useSelector(state => state.category.categories);
   const brandState = useSelector(state => state.brand.brands);
   const colorState = useSelector(state => state.color.colors);
-  const imagesState = useSelector(state => state.upload.images) || []; 
+  const {isSuccess, isError, isLoading, createsProduct} = useSelector(state => state.product);
+
+  useEffect(() => {
+    if (isLoading) {
+      message.loading('creating product...')
+    }
+  })
 
   const colors = [];
   colorState.map((color) => (
@@ -63,8 +54,10 @@ const AddProducts = () => {
     price: number().required('Price is required').min(1, 'Price should be least 1'),
     quantity: number().required('quantity is required').min(1, 'Price should be least 1'),
     category: string().required('Category is required'),
+    tag: string().required('Tag is required'),
     brand: string().required('Brand is required'),
-    colors: array().length(1,"Color is required").required('Color is required')
+    colors: array().min(1,"Color is required").required('Color is required'),
+    images: array().min(1,"Image is required").required('Image is required')
   });
 
   const formik = useFormik({
@@ -74,14 +67,25 @@ const AddProducts = () => {
       price: '',
       quantity: '',
       category: '',
+      tag: '',
       brand: '',
       colors: '',
+      images: imagesState
     },
     validationSchema: userSchema,
     onSubmit: (values) => {
+      //dispatch(addProduct(values));
       console.log(values);
-      dispatch(addProduct({...values, images: imagesState}));
-      
+      if (isSuccess && createsProduct) {
+        message.success("Product added successfully!")
+        setTimeout(() => {
+          navigate('/admin/products')
+        }, 3000)
+        formik.resetForm();
+      } 
+      if (isError) {
+        message.error("Something went wrong!!!")
+      }
     },
   });
   return (
@@ -159,6 +163,23 @@ const AddProducts = () => {
           </div>
           <Select
             width="100%"
+            name="tag"
+            placeholder="Please Select Tag"
+            className="select-input"
+            options={[
+              {value: "featured",label: "Featured"},
+              {value: "speciald",label: "Special"},
+              {value: "featured",label: "Featured"},
+            ]}
+            onChange={formik.handleChange('tag')}
+          />
+          <div className="error">
+            {formik.touched.tag && formik.errors.tag ? (
+              <div className="mb-2">{formik.errors.tag}</div>
+            ) : null}
+          </div>
+          <Select
+            width="100%"
             name="brand"
             placeholder="Please Select Brand"
             className="select-input"
@@ -200,21 +221,27 @@ const AddProducts = () => {
               )}
             </Dropzone>
           </div>
+          <div className="error">
+            {formik.touched.images && formik.errors.images ? (
+              <div key={formik.errors.images} className="mb-2">{formik.errors.images}</div>
+            ) : null}
+          </div>
           <div className="mt-4 d-flex flex-wrap gap-3">
-
-            {Array.isArray(imagesState) && imagesState?.map((image) => (
+            {Array.isArray(imagesState) && imagesState?.map((image, index) => (
               <div key={image.public_id} className='position-relative'>
-                <button 
-                  type='button'
+                <span 
+                  key={image.public_id}
                   className='position-absolute top-0 end-0 btn btn-danger btn-sm ' 
                   onClick={() => dispatch(deleteImage(image.public_id))}>
                     X
-                  </button>
-                <img src={image.url} width={200} height={200} style={{objectFit: "contain"}} alt="product" />
+                  </span>
+                <img key={index} src={image?.url} width={200} height={200} style={{objectFit: "contain"}} alt="product" />
               </div>
             ))}
           </div>
-          <button className="add-blog-button">Add Product</button>
+          
+          <button disabled={isLoading} className="add-blog-button">
+            {isLoading ? 'Loading' : 'Add Product'}</button>
         </form>
       </div>
     </div>

@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import uploadService from './upload.Sevice';
 
 const initialState = {
-    images: {},
+    images: [],
     isError: false,
     isLoading: false,
     isSuccess: false,
@@ -17,7 +17,6 @@ export const uploadImage = createAsyncThunk(
             files.forEach((file) => {
                 formData.append('images', file);
             });
-            console.log(formData);
             return await uploadService.uploadImage(formData);
         } catch (error) {
             return thunkAPI.rejectWithValue(error)
@@ -50,7 +49,10 @@ export const uploadSlice = createSlice({
                     state.isLoading = false;
                     state.isError = false;
                     state.isSuccess = true;
-                    state.images = action.payload;
+                    if (state?.images === null || state?.images === undefined ) {
+                        state.images = []
+                    }
+                    state.images.push(...action.payload);
                     state.message = "success"
             })
             .addCase(uploadImage.rejected,
@@ -69,13 +71,20 @@ export const uploadSlice = createSlice({
                     state.isLoading = false;
                     state.isError = false;
                     state.isSuccess = true;
-                    state.images = [];
+                    const filterimage = []
+                    !state.images.find(image => image.public_id === undefined)  && Array.isArray(state.images)
+                       ? state.images.forEach(image => {
+                            image.public_id !== action.payload && filterimage.push(image);
+                        })
+                        : state.images.forEach(image => image.public_id === undefined);
+                    state.images = filterimage;
                     state.message = "success"
                 }
             ).addCase(deleteImage.rejected, 
                 (state, action) => {
                     state.isLoading = false;
                     state.isError = true;
+                    //state.images = [];
                     state.isSuccess = false;
                     state.message = action.payload;
                 }

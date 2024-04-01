@@ -54,7 +54,7 @@ export const getAllProducts = asyncHandler(async (req, res) => {
             const productCount = await Product.countDocuments();
             if(skip >= productCount) throw new Error("This page dose not exists");
         }
-        query =query.populate('color', ['title', '-_id']).select(['title', 'description', 'price', 'brand', 'color', 'cactegory']);
+        query = query.populate('colors category brand', ['title','name',  '-_id']).select(['title', 'description', 'price', 'brand', 'colors', 'category']);
         const products = await query
         res.status(200).json(products);
     } catch (error) {

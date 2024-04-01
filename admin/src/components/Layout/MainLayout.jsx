@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './mainLayout.scss'
+import { ToastContainer } from 'react-toastify';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import {
     MenuFoldOutlined,
@@ -20,6 +21,7 @@ import { FaBlog } from "react-icons/fa6";
 import { ImBlog } from "react-icons/im";
 import { IoIosNotifications } from "react-icons/io";
 import { useMediaQuery } from "@uidotdev/usehooks";
+import 'react-toastify/dist/ReactToastify.css';
 
 import { Layout, Menu, Button, theme, Breadcrumb, Avatar, Dropdown } from 'antd';
 const { Header, Sider, Content, Footer } = Layout;
@@ -188,6 +190,17 @@ const MainLayout = () => {
               borderRadius: borderRadiusLG,
             }}
           >
+          <ToastContainer
+            position="top-right"
+            autoClose={250}
+            hideProgressBar={false}
+            newestOnTop={true}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            theme="light"
+          />
             <Outlet />
           </div>
         </Content>

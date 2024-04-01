@@ -25,6 +25,7 @@ const productSchema = new mongoose.Schema({
         type: Number,
         default: 0,
     },
+    tag: String,
     sold: {
         type: Number,
         default: 0,
@@ -32,7 +33,7 @@ const productSchema = new mongoose.Schema({
     },
     brand: { type: ObjectId, ref: "Brand" }
     ,
-    color: [{ type: ObjectId, ref: "Color" }],
+    colors: [{ type: ObjectId, ref: "Color" }],
     rating: [{
       star: Number,
       postedby: { type: ObjectId, ref: "User"},

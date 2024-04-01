@@ -25,6 +25,7 @@ export const addProduct = createAsyncThunk(
 
 const initialState = {
     products: [],
+    createdProduct: null,
     isError: false,
     isLoading: false,
     isSuccess: false,
@@ -49,6 +50,24 @@ export const productSlice = createSlice({
                     state.message = "success"
             })
             .addCase(getProducts.rejected,
+                (state, action) => {
+                    state.isLoading = false;
+                    state.isError = true;
+                    state.isSuccess = false;
+                    state.message = action.error;
+            })
+            .addCase(addProduct.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(addProduct.fulfilled,
+                (state, action) => {
+                    state.isLoading = false;
+                    state.isError = false;
+                    state.isSuccess = true;
+                    state.createdProduct = action.payload;
+                    state.message = "success"
+            })
+            .addCase(addProduct.rejected,
                 (state, action) => {
                     state.isLoading = false;
                     state.isError = true;

@@ -24,8 +24,9 @@ const BlogsCategory = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getBCategories());
-  }, []);
+  }, [dispatch]);
   const bCategoriesState = useSelector(state => state.bCategory.BCategories);
+  console.log(bCategoriesState);
   const data1 = [];
   for (let i = 0; i < bCategoriesState.length; i++) {
     data1.push({
