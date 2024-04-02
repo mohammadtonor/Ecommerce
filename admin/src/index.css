@@ -186,7 +186,7 @@ main div {
 }
 
 .table-action{
-  margin-right: 5px;
+  margin-right: 0px;
   color: var(--color-e52e2e);
 }
 .upload-dropzone{
@@ -213,4 +213,10 @@ main div {
 button:disabled {
   background-color: var(--color-828599);
   color: var(--color-c3d4da);
+}
+
+.ant-modal-root .ant-modal-mask {
+  background-color: rgb(0, 0, 0, 0.5) !important;
+  justify-content: center !important;
+  align-items: center !important;
 }

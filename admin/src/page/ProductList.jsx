@@ -68,7 +68,6 @@ const ProductList = () => {
         if (indx === productState[i].colors.length - 1) {
           return acc.concat(cur.title)
         }
-        console.log(cur);
         return acc.concat(cur.title, ', ')
       }, ''),
       action: (

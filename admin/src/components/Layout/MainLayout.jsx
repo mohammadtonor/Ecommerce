@@ -21,6 +21,8 @@ import { FaBlog } from "react-icons/fa6";
 import { ImBlog } from "react-icons/im";
 import { IoIosNotifications } from "react-icons/io";
 import { useMediaQuery } from "@uidotdev/usehooks";
+import { RiCoupon4Line } from "react-icons/ri";
+
 import 'react-toastify/dist/ReactToastify.css';
 
 import { Layout, Menu, Button, theme, Breadcrumb, Avatar, Dropdown } from 'antd';
@@ -47,6 +49,10 @@ const { Header, Sider, Content, Footer } = Layout;
       getItem("Category List", "product-category", <BiCategory className='fs-4'/>),
       getItem("New Color", "colors/new", <IoMdColorFill className='fs-4'/>),
       getItem("Color List", "colors", <IoMdColorFill className='fs-4'/>),
+    ]),
+    getItem("Marketing", "marketing", <RiCoupon4Line className='fs-4'/>, [
+      getItem("Add Coupon", "coupons/new",  <RiCoupon4Line  className='fs-4'/>),
+      getItem("Coupon List", "coupons",  <RiCoupon4Line className='fs-4'/>),
     ]),
     getItem("Orders", "orders", <FaClipboardList  className='fs-4'/>),
     getItem("Blogs", "blogs", <FaBlog className='fs-4'/>, [

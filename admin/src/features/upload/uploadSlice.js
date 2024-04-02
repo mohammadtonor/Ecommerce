@@ -49,10 +49,7 @@ export const uploadSlice = createSlice({
                     state.isLoading = false;
                     state.isError = false;
                     state.isSuccess = true;
-                    if (state?.images === null || state?.images === undefined ) {
-                        state.images = []
-                    }
-                    state.images.push(...action.payload);
+                    state.images.push(...action.payload.filter(image => !!image.url))
                     state.message = "success"
             })
             .addCase(uploadImage.rejected,
@@ -72,11 +69,9 @@ export const uploadSlice = createSlice({
                     state.isError = false;
                     state.isSuccess = true;
                     const filterimage = []
-                    !state.images.find(image => image.public_id === undefined)  && Array.isArray(state.images)
-                       ? state.images.forEach(image => {
-                            image.public_id !== action.payload && filterimage.push(image);
-                        })
-                        : state.images.forEach(image => image.public_id === undefined);
+                    state.images.forEach(image => {
+                        image.public_id !== action.payload && filterimage.push(image); 
+                    })
                     state.images = filterimage;
                     state.message = "success"
                 }

@@ -46,6 +46,7 @@ export const updateBrand = asyncHandler( async (req, res) => {
     try {
         const { id } = req.params;
         validateMongodbId(id);
+        console.log(req.body);
         const category = await Brand.findByIdAndUpdate(
             id,
             { ...req.body },

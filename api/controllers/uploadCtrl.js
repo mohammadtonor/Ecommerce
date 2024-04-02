@@ -11,7 +11,6 @@ export const uploadImages = asyncHandler( async (req, res) => {
             const { path } = file;
             const newPath =await uploader(path)
             urls.push(newPath)
-            console.log(path);
             //fs.unlinkSync(path);
         }
         const images = urls.map(url => ( url ));
@@ -32,7 +31,7 @@ export const deleteImages = asyncHandler( async (req, res) => {
         //        $pull: { images: { public_id: path } },
         //     },
         //   );
-        res.json(deleter);
+        res.json(path);
     } catch (error) {
         throw new Error(error)
     }

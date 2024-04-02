@@ -8,7 +8,8 @@ const CustomInput = ({
   val,
   name,
   onChange,
-  onBlur
+  onBlur,
+  defVal
 }) => {
   return (
     <div class="form-floating">
@@ -21,6 +22,7 @@ const CustomInput = ({
         placeholder={placeholder}
         onChange={onChange}
         onBlur={onBlur}
+        defaultValue={defVal}
       />
       <label for="floatingInput">{label}</label>
     </div>
