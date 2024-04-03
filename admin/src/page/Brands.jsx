@@ -28,7 +28,6 @@ const Brands = () => {
   const dispatch = useDispatch();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [brandId, setBrandId] = useState('');
-  const [isDeleted, setIsDeleted] = useState('');
 
   const {
     isError,
@@ -42,7 +41,6 @@ const Brands = () => {
   }, [])
 
   useEffect(() => {
-    
     if (isSuccess && message?.message?.split(" ")?.includes('Deleted!')) {
       toast.success(message?.message , { autoClose: 2000, delay: 1500, });
     }

@@ -1,4 +1,4 @@
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
+import {createSlice, createAsyncThunk, createAction} from '@reduxjs/toolkit';
 import categoryService from './categoryService';
 
 export const getcategories = createAsyncThunk(
@@ -22,14 +22,52 @@ export const createCategory = createAsyncThunk(
         }
     }
 )
+
+export const getOnePCategory = createAsyncThunk(
+    'category/getOnePCategory',
+    async (id, thunkAPI) => {
+        try {
+            return await categoryService.getOnePCategory(id);
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error)
+        }
+    }
+)
+
+export const updatePCategory = createAsyncThunk(
+    'category/updatePCategory',
+    async (data, thunkAPI) => {
+        try {
+            const {id , category} = data
+            return await categoryService.updatePCategory(id, category);
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error)
+        }
+    }
+)
+
+export const deletePCategory = createAsyncThunk(
+    'category/deletePCategory',
+    async (id, thunkApi) => {
+        try {
+            return await categoryService.deletePCategory(id);
+        } catch (error) {
+            return thunkApi.rejectWithValue(error)
+        }
+    }
+)
  
+export const resetState = createAction("Reset_All");
+
 const initialState = {
     categories: [],
     createdCat: null,
+    updatedCat: null,
     isError: false,
     isLoading: false,
     isSuccess: false,
-    message: ""
+    message: "",
+    catName: ""
 }
 
 export const categorySlice = createSlice({
@@ -47,7 +85,6 @@ export const categorySlice = createSlice({
                     state.isError = false;
                     state.isSuccess = true;
                     state.categories = action.payload;
-                    state.message = "success"
             })
             .addCase(getcategories.rejected,
                 (state, action) => {
@@ -65,9 +102,67 @@ export const categorySlice = createSlice({
                     state.isError = false;
                     state.isSuccess = true;
                     state.createdCat = action.payload;
-                    state.message = "success"
             })
             .addCase(createCategory.rejected,
+                (state, action) => {
+                    state.isLoading = false;
+                    state.isError = true;
+                    state.isSuccess = false;
+                    state.message = action.error;
+            })
+            .addCase(resetState, () => initialState)
+            .addCase(updatePCategory.pending, 
+                (state) => {
+                    state.isLoading = true;
+            })
+            .addCase(updatePCategory.fulfilled, 
+                (state, action) => {
+                    state.isLoading = false;
+                    state.isError = false;
+                    state.isSuccess = true;
+                    state.updatedCat = action.payload
+                }    
+            )
+            .addCase(updatePCategory.rejected, 
+                (state, action) => {
+                    state.isLoading = false;
+                    state.isError = true;
+                    state.isSuccess = false;
+                    state.message = action.error;
+                }
+            )
+            .addCase(getOnePCategory.pending, 
+                (state) => {
+                    state.isLoading = true;
+            })
+            .addCase(getOnePCategory.fulfilled, 
+                (state, action) => {
+                    state.isLoading = false;
+                    state.isError = false;
+                    state.isSuccess = true;
+                    state.catName = action.payload.name
+                }
+            )
+            .addCase(getOnePCategory.rejected, 
+                (state, action) => {
+                    state.isLoading = false;
+                    state.isError = true;
+                    state.isSuccess = false;
+                    state.message = action.error;
+            })
+            .addCase(deletePCategory.pending, 
+                (state) => {
+                    state.isLoading = true;
+            })
+            .addCase(deletePCategory.fulfilled, 
+                (state, action) => {
+                    state.isLoading = false;
+                    state.isError = false;
+                    state.isSuccess = true;
+                    state.message = action.payload
+                }
+            )
+            .addCase(deletePCategory.rejected, 
                 (state, action) => {
                     state.isLoading = false;
                     state.isError = true;

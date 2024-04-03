@@ -1,28 +1,57 @@
 import React, { useEffect, useState } from 'react'
 import CustomInput from '../components/CustomInput'
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { addCoupon, resetState } from '../features/coupons/couponSlice';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { addCoupon, getOneCoupon, resetState, updateCoupon } from '../features/coupons/couponSlice';
 import { useFormik } from 'formik';
 import { date, number, object, string } from 'yup';
 import {toast} from 'react-toastify'
+import { format, parseISO } from 'date-fns';
 
 const AddCoupon= () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const {isSuccess, isError, isLoading, createdCoupon} = useSelector(state => state.coupon);
+  const location = useLocation();
+  const couponId = location.pathname.split('/')[3];
+  const isUpdating = couponId !== undefined && couponId !== 'new';
+  const formatDate = (date) => {
+    const [month, day, year] = new Date(date)?.toLocaleString()?.split(',')[0].split('/');
+    const newData =  [year, `0${month}`, day].join('-');
+    return newData.toString();
+  }
+
+  useEffect(()=> {
+    if(isUpdating) {
+      dispatch(resetState())
+      setTimeout(()=> dispatch(getOneCoupon(couponId)), 50)
+    } else {
+      dispatch(resetState())
+    }
+  }, [couponId]);
+
+  const {
+    isSuccess,
+    isError,
+    isLoading,
+    createdCoupon,
+    updatedCoupon,
+    message,
+  } = useSelector((state) => state.coupon);
+  
+  const {
+    couponData,
+  } = useSelector((state) => state.coupon);
 
   useEffect(() => {
-    if (isSuccess && createdCoupon) {
-      toast.success("Coupon added successfully!", { delay: 2000 })
-    }
-    if(isLoading){
-      toast.info("Creating Coupon...", { autoClose: 1000 })
+    if ((isSuccess && createdCoupon) || (isSuccess && updatedCoupon )) {
+      toast.success(`Coupon ${isUpdating ? 'Updated' : 'Created'} successfully!`, { delay: 2000 })
     }
     if (isError) {
-      toast.error("Something went wrong!!!")
+      toast.error(message)
     }
-  }, [isLoading, isError, isSuccess])
+  }, [isError, isSuccess, updatedCoupon, createdCoupon]);
+
+  
 
   let userSchema = object({
     name: string().required('Name is Required'),
@@ -31,19 +60,26 @@ const AddCoupon= () => {
   });
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      name: '',
-      expiry: '',
-      discount: ''
+      name: couponData?.name ||'',
+      expiry: formatDate(couponData?.expiry) ||'',
+      discount: couponData?.discount ||'',
     },
     validationSchema: userSchema,
     onSubmit: (values) => {
-      dispatch(addCoupon(values));
+      if (isUpdating) {
+        const data = { id: couponId, couponData: values}
+        dispatch(updateCoupon(data));
+      } else {
+        dispatch(addCoupon(values));
+      }
       setTimeout(() => {
-        dispatch(resetState());
-        navigate('/admin/coupons')
-      }, 2000)
-      formik.resetForm(); 
+        if (!isError) {
+          navigate('/admin/coupons')
+          formik.resetForm(); 
+        }
+      }, 1000)
     },
   });
   return (

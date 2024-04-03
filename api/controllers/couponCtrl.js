@@ -46,14 +46,14 @@ export const updateCoupon = asyncHandler( async (req, res) => {
     try {
         const { id } = req.params;
         validateMongodbId(id);
-        const category = await Coupon.findByIdAndUpdate(
+        const coupon = await Coupon.findByIdAndUpdate(
             id,
             { ...req.body },
             {
                 new: true
             }
         );
-        res.json(category);
+        res.json(coupon);
     } catch (error) {
         throw new Error(error.message);
     }

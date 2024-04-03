@@ -1,10 +1,12 @@
-import { Table } from 'antd';
-import React, { useEffect } from 'react'
+import { Button, Table } from 'antd';
+import React, { useEffect, useState } from 'react'
 import {useDispatch, useSelector} from 'react-redux';
-import {getColors} from './../features/colors/ColorSlice';
+import {deleteColor, getColors, resetState} from './../features/colors/ColorSlice';
 import { Link } from 'react-router-dom';
 import { FaEdit } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
+import CustomModal from '../components/CustomModal';
+import { toast } from 'react-toastify';
 
 const columns = [
     {
@@ -31,25 +33,63 @@ const columns = [
   }
 const Colors = () => {
   const dispatch = useDispatch();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [colorId, setColorId] = useState('');
 
   useEffect(() => {
-    dispatch(getColors());
+    dispatch(resetState());
+    setTimeout(()=> {
+      dispatch(getColors());
+    }, 50)
   }, []);
-  const colorState = useSelector(state => state.color.colors);
+
+  const {colors: colorState, isSuccess, isError, isLoading, message} = useSelector(state => state.color);
+  const deleted = message?.message?.split(" ").includes('Deleted!');
+
+  useEffect(() => {
+    if (isSuccess && message?.message?.split(" ")?.includes('Deleted!')) {
+      toast.success(message?.message , { autoClose: 2000, delay: 1500, });
+    }
+    if (isError) {
+      toast.error("Something went wrong!!!")
+    }
+  }, [isError, message ])
+
+  const handleOk = () => {
+    dispatch(deleteColor(colorId))
+    setIsModalOpen(false);
+    
+    setTimeout(() => {
+      dispatch(getColors());
+    }, 500)
+  };
+
+  const showModal = (id) => {
+    setColorId(id)
+    setIsModalOpen(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
   const data1 = [];
-  console.log(colorState);
   for (let i = 0; i < colorState.length ; i++) {
     data1.push({
       title:colorState[i].title,
       key: i + 1,
       action: (
         <>
-          <Link to='/' className='table-action'>
+          <Link to={`/admin/colors/${colorState[i]._id}`}className='table-action'>
             <FaEdit size={20} />
           </Link>
-          <Link to='/' className='table-action'>
+          <Button 
+            type="link" 
+            className="table-action" 
+            onClick={() => showModal(colorState[i]._id)}
+          >
             <MdDelete size={20} />
-          </Link>
+          </Button>
         </>
       ),
     });
@@ -60,6 +100,13 @@ const Colors = () => {
         <div>
             <Table columns={columns} dataSource={data1} />
         </div>
+        <CustomModal
+          content='Are you sure for delete this Item?'
+          title='Delete Color'
+          open={isModalOpen}
+          handleCancel={handleCancel}
+          performAction={handleOk}
+        />
     </div>
   )
 }

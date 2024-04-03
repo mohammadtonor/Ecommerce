@@ -46,13 +46,16 @@ function App() {
           <Route path='products' element={<ProductList />}/>
           <Route path='products/new' element={<AddProducts />}/>
           <Route path='product-category/new' element={<AddProductCat />}/>
+          <Route path='product-category/:id' element={<AddProductCat />}/>
           <Route path='colors' element={<Colors />}/>
           <Route path='colors/new' element={<AddColor />}/>
+          <Route path='colors/:id' element={<AddColor />}/>
           <Route path='brands' element={<Brands />}/>
           <Route path='brand/new' element={<AddBrand />}/>
           <Route path='brand/:id' element={<AddBrand />}/>
           <Route path='coupons' element={<Coupons />}/>
           <Route path='coupons/new' element={<AddCoupon />}/>
+          <Route path='coupons/:id' element={<AddCoupon />}/>
           <Route path='product-category' element={<ProductCategory />}/>
         </Route>
       </Routes>

@@ -12,9 +12,28 @@ const createCategory = async (category) => {
     return response.data
 }
 
+const getOnePCategory = async (id) => {
+    const response = await axios.get(`${BASE_URL}categories/${id}`,id);
+    return response.data
+}
+
+const updatePCategory = async (id, category) => {
+    console.log(category);
+    const response = await axios.put(`${BASE_URL}categories/${id}`,category, config)
+    return response.data
+}
+
+const deletePCategory = async (id) => {
+    const response = await axios.delete(`${BASE_URL}categories/${id}`, config);
+    return response.data
+}
+
 const categoryService = {
     getcategories,
-    createCategory
+    createCategory,
+    updatePCategory,
+    deletePCategory,
+    getOnePCategory
 }
 
 export default categoryService;
