@@ -18,6 +18,8 @@ const addProduct = async (productData) => {
     return response.data;
 }
 
+ 
+
 const productService = {
     getProducts,
     addProduct,

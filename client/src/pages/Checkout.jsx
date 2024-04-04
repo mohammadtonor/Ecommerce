@@ -20,11 +20,11 @@ const Checkout = () => {
                                         </Link>
                                     </li>
                                     &nbsp; /
-                                    <li className='breadcrumb-item' aria-colcount='page'>
+                                    <li className='breadcrumb-item'>
                                         Information
                                     </li>
                                     &nbsp; / <li className='breadcrumb-item'>Shipping</li>
-                                    &nbsp; / <li className='breadcrumb-item active' aria-colcount='page'>Payment</li>
+                                    &nbsp; / <li className='breadcrumb-item active'>Payment</li>
                                 </ol>
                             </nav>
                             <h3>Contact Information</h3>

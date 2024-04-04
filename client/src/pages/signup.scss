@@ -23,6 +23,9 @@
             text-align: center;
             color: #777;
         }
+        .error {
+            color: red;
+        }
 
         .signup-action {
             display: flex;
@@ -63,7 +66,10 @@
                     outline: 1px solid rgb(153, 153, 153);
                 }
             }
-        
+            
+            .error {
+                 color: red;
+            }
             
         }
         a{

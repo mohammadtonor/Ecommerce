@@ -27,7 +27,8 @@ export const createUser = asyncHandler(async (req, res) => {
             ...other
         });
         const savedUser = await newUser.save();
-        res.status(201).json(savedUser);
+        const {password: pass, ...restUser} = savedUser;
+        res.status(201).json(restUser);
     } catch (error) {
        throw new Error(error)
     }

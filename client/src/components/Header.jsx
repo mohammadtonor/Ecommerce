@@ -62,7 +62,7 @@ const Header = () => {
                   </Link>
                 </div>
                 <div>
-                  <Link to={'/admin'} className="d-flex">
+                  <Link to={'/login'} className="d-flex">
                     <FaRegUser  className="fs-3 mt-1"/>
                     <p>User <br /> Profile</p>
                   </Link>

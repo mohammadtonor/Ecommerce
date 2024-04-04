@@ -1,7 +1,4 @@
-import { LiaShippingFastSolid } from "react-icons/lia";
-import { BsGift } from "react-icons/bs";
-import { FaHeadphonesSimple } from "react-icons/fa6";
-import { FaRegMoneyBillAlt } from "react-icons/fa";
+
 import { services } from "../../utils/data";
 const HomeServices = () => {
   return (
