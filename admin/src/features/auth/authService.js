@@ -38,6 +38,10 @@ const getOrders = async () => {
     return response.data;
 };
 
+const getOrderByUser = async (id) => {
+    const response = await axios.get(`${BASE_URL}users/get-user-orders/${id}`, config)
+    return response.data;
+}
 
 const authService = {
     login,
@@ -45,7 +49,8 @@ const authService = {
     register,
     forgotPassword,
     resetPassword,
-    logout
+    logout,
+    getOrderByUser
 };
 
 export default authService;

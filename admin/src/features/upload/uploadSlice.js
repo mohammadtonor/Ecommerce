@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import uploadService from './upload.Sevice';
 
 const initialState = {
@@ -35,6 +35,15 @@ export const deleteImage = createAsyncThunk(
     }
 )
 
+export const updateImages = createAsyncThunk(
+    'upload/UpdateImages',
+    (images, thunkAPI) => {
+        return images;
+    } 
+)
+
+export const resetImages = createAction("Reset_All_Imags")
+
 export const uploadSlice = createSlice({
     name: 'images',
     initialState,
@@ -42,14 +51,17 @@ export const uploadSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(uploadImage.pending,
             (state) => {
-                state.isLoading = true;     
+                state.isLoading = true;
+                state.isSuccess = false 
+                state.isError = false    
             })
             .addCase(uploadImage.fulfilled,
                 (state, action) => {
                     state.isLoading = false;
                     state.isError = false;
                     state.isSuccess = true;
-                    state.images.push(...action.payload.filter(image => !!image.url))
+                    Array.isArray(action.payload) &&
+                        state.images.push(...action.payload?.filter(image => !!image.url))
                     state.message = "success"
             })
             .addCase(uploadImage.rejected,
@@ -84,6 +96,12 @@ export const uploadSlice = createSlice({
                     state.message = action.payload;
                 }
             )
+            .addCase(updateImages.fulfilled , (state, action) => {
+                state.images = [];
+                Array.isArray(action.payload) &&
+                state.images.push(...action.payload?.filter(image => !!image.url))
+            })
+            .addCase(resetImages , () => initialState)
 
     }
 })

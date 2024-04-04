@@ -26,6 +26,8 @@ import AddProducts from './page/AddProducts';
 import AddProductCat from './page/AddCatProduct';
 import AddCoupon from './page/AddCoupon';
 import Coupons from './page/CouponList';
+import ViewEnquary from './page/ViewEnquary';
+import ViewOrders from './page/ViewOrder';
 
 function App() {
   return (
@@ -37,11 +39,15 @@ function App() {
         <Route path="/admin" element={<MainLayout />}>
           <Route index element={<Dashborad />}/>
           <Route path='enquary' element={<Enquaries />}/>
+          <Route path='enquary/:id' element={<ViewEnquary />}/>
           <Route path='blogs' element={<BlogList />}/>
           <Route path='blogs/new' element={<AddBlog />}/>
+          <Route path='blogs/:id' element={<AddBlog />}/>
           <Route path='blogs-category' element={<BlogsCategory />}/>
           <Route path='blog-category/new' element={<AddCatBlogs />}/>
-          <Route path='orders' element={<OrdersList />}/>
+          <Route path='blog-category/:id' element={<AddCatBlogs />}/>
+          <Route path='orders' element={<ViewOrders />}/>
+          <Route path='orders/:id' element={<ViewOrders />}/>
           <Route path='customers' element={<Custumers />}/>
           <Route path='products' element={<ProductList />}/>
           <Route path='products/new' element={<AddProducts />}/>

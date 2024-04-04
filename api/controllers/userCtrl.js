@@ -428,10 +428,10 @@ export const updatePassword = asyncHandler(async (req, res) => {
   });
 
   export const getUserOrders = asyncHandler(async(req, res) => {
-    const {_id} = req.user;
-    validateMongodbId(_id);
+    const {id} = req.params;
+    validateMongodbId(id);
     try {
-        const orders = await Order.find({ orderBy: _id})
+        const orders = await Order.find({ orderBy:{ _id: id }})
             .populate('orderBy products.product',
                 ['title', 'price','firstName','lastName', 'product._id', 'orderBy._id'])
         res.json(orders);
@@ -450,3 +450,4 @@ export const updatePassword = asyncHandler(async (req, res) => {
         throw new Error(error)
     }
   })
+

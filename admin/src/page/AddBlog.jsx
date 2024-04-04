@@ -1,40 +1,67 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import CustomInput from '../components/CustomInput'
 import { Select } from 'antd'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { InboxOutlined } from '@ant-design/icons';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { array, object, string } from 'yup';
-import { createBlog } from '../features/blogs/BlogsSlice';
+import { createBlog, getOneBlog, resetState, updateBlog } from '../features/blogs/BlogsSlice';
 import { getBCategories } from '../features/blogCategory/BcategorySlice';
 import { toast } from 'react-toastify';
 import { useFormik } from 'formik';
 import Dropzone from 'react-dropzone';
-import { deleteImage, uploadImage } from '../features/upload/uploadSlice';
+import { deleteImage, uploadImage,updateImages, resetImages } from '../features/upload/uploadSlice';
 
 
 const AddBlog = () => {
   const dispatch = useDispatch();
   const navigation = useNavigate();
+
+  const location = useLocation();
+  const blogId = location.pathname.split('/')[3];
+  const isUpdating = blogId !== undefined && blogId !== 'new';
+  const catBlog = useSelector(state => state.bCategory.BCategories);
+  let img = [];
+  const {
+    isError,
+    isSuccess,
+    createdBlog,
+    updatedBlog,
+    blogData,
+    message,
+  } = useSelector((state) => state.blog);
+  
+
   const imageState = useSelector(state => state.upload.images);
-  const {isLoading, isError, isSuccess, createdBlog, message} = useSelector(state => state.blog);
+  const [images, setImages] = useState()
+  useEffect(() => {
+    if(isUpdating){
+      dispatch(getOneBlog(blogId));
+      dispatch(updateImages(blogData?.images));
+    } else {
+      dispatch(resetImages())
+      dispatch(resetState())
+    }
+  }, [blogId])
+
 
   useEffect(() => {
     dispatch(getBCategories());
-  }, [dispatch]);
+  }, []);
 
-  const catBlog = useSelector(state => state.bCategory.BCategories);
+  //window.location.reload()
+
 
   useEffect(() => {
-    if(isLoading) {
-      toast.warning("Creating Blog...", {autoClose: 1000})
+    if((isSuccess && createdBlog) || (isSuccess && updatedBlog)) {
+      toast(`Blog ${isUpdating ? "Updated" : "Created"} SuceesFully`, {autoClose: 1000})
     }
     if(isError) {
       toast.error(message)
     }
-  }, [isLoading, isError])
+  }, [isSuccess, isError, createdBlog, updatedBlog]);
 
   const schema = object({
     title: string().required('Title is required'),
@@ -42,25 +69,27 @@ const AddBlog = () => {
     category: string().required('Category is required'),
     images: array().min(1, "").required('Image is required')
   })
-
-
+  
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      title: '',
-      description: '',
-      category: '',
-      images: imageState
+      title: blogData?.title || '',
+      description: blogData?.description || '',
+      category: blogData?.category || '',
+      images: images || ''
     },
     validationSchema: schema,
     onSubmit: (values) => {
-      dispatch(createBlog(values));
-      setTimeout(() => {
-        if(isSuccess && createdBlog) {
-          toast.success('Blog added successfully', {autoClose: 3000})
+      
+      if(isUpdating ) {
+        dispatch(updateBlog({id: blogId, blogData: values}))
+        setTimeout(() => {
           navigation('/admin/blogs')
-        }
-      }, 2000)
-      formik.resetForm();
+        }, 2000)
+      } else {
+        dispatch(createBlog(values));
+        formik.resetForm();
+      }
     }
   })
 
@@ -78,7 +107,6 @@ const AddBlog = () => {
             label={"Enter Blog Title"} 
             type={"text"} 
             onChange={formik.handleChange('title')}
-            onBlur={formik.handleBlur('title')}
             val={formik.values.title}
           />
           <div className="error">
@@ -91,12 +119,13 @@ const AddBlog = () => {
             name="category" 
             id="category" 
             className="p-6"
+            defaultValue={formik.values.category}
             placeholder="Select Blog Category"
             onChange={formik.handleChange('category')}
-            val={formik.values.category}
+            value={formik.values.category}
           >
             {catBlog && catBlog?.map((cat) => (
-              <option key={cat._id} value={cat._id}>{cat.title}</option>
+              <Select.Option   value={cat._id}>{cat.title}</Select.Option>
             ))}
           </Select>
           <div className="error">
@@ -108,10 +137,8 @@ const AddBlog = () => {
           <ReactQuill
             id="description" 
             theme="snow" 
-            val={formik.values.description} 
+            value={formik.values.description} 
             onChange={formik.handleChange('description')}
-            onBlur={formik.handleBlur('description')}
-
           />
           <div className="error">
               {formik.touched.description && formik.errors.description ? (
@@ -121,6 +148,7 @@ const AddBlog = () => {
           <div className='mt-4'/>
           <div className='upload-dropzone'>
               <Dropzone
+                onChange={formik.handleChange('images')}
                 onDrop={(acceptedFiles) => dispatch(uploadImage(acceptedFiles))}
               >
                 {({getRootProps, getInputProps}) => (
@@ -143,16 +171,18 @@ const AddBlog = () => {
                     <button 
                       type='button'
                       className='position-absolute top-0 end-0 btn btn-danger btn-sm ' 
-                      onClick={() => dispatch(deleteImage(image.public_id))}>
+                      onClick={
+                        () => {
+                          dispatch(deleteImage(image.public_id))
+                        }
+                      }>
                         X
                       </button>
                     <img src={image.url} width={200} height={200} style={{objectFit: "contain"}} alt="product" />
                   </div>
                 ))}
             </div>
-          <button 
-
-          className="add-blog-button">Add Blog</button>
+          <button className="add-blog-button">Add Blog</button>
         </form>
       </div>
     </div>

@@ -48,7 +48,6 @@ const Coupons = () => {
   const {
     isSuccess,
     isError,
-    isLoading,
     message,
   } = useSelector((state) => state.coupon);
 

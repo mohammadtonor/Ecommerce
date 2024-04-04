@@ -1,46 +1,69 @@
 import React, { useEffect, useState } from 'react'
 import CustomInput from '../components/CustomInput'
 import {useDispatch, useSelector} from 'react-redux';
-import {useNavigate} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import {object, string} from 'yup';
 import { useFormik } from 'formik';
-import {createBCategory} from './../features/blogCategory/BcategorySlice';
+import {createBCategory, getOneBCategory, resetState, updateBCategory} from './../features/blogCategory/BcategorySlice';
 import { toast } from 'react-toastify';
 
 
 const AddCatBlogs = () => {
   const dispatch = useDispatch();
   const navigation = useNavigate()
-  const {isLoading, isError, isSuccess,message, createdBCattegory} =
-   useSelector(state => state.bCategory)
-
-  useEffect(()=> {
-    if (isLoading) {
-      toast.warning("Creating Category Blog", {autoClose: 1000})
+  const location  = useLocation();
+  const bCatId = location.pathname.split('/')[3];
+  const isUpdating = bCatId !== undefined && bCatId !== 'new';
+  useEffect(() => {
+    if (isUpdating) {
+      dispatch(getOneBCategory(bCatId))
+    } else {
+      dispatch(resetState())
     }
-    if (isError){
-      toast.error(message)
-    }
+  }, [bCatId])
+  
+  const {
+    isLoading,
+    isError,
+    isSuccess,
+    message,
+    createdBCattegory,
+    BCategoryTitle,
+    updatedBCategory,
+  } = useSelector((state) => state.bCategory);
 
-  }, [isLoading, isError]);
+  useEffect(() => {
+    if ((isSuccess && createdBCattegory) || (isSuccess && updatedBCategory)) {
+      toast.success("Caegory Blog Created Success!", {autoClose: 2500});
+    }
+    if (isError) {
+      toast.error(message);
+    }
+  }, [isSuccess,isError, updatedBCategory, createdBCattegory ]);
 
   const shema = object({
     title: string().required("Title is Required")
   })
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      title: ''
+      title: BCategoryTitle || "",
     },
     validationSchema: shema,
     onSubmit: (values) => {
-      dispatch(createBCategory(values))
-      setTimeout(() => {
-        if(isSuccess && createBCategory) {
-          toast.success("Caegory Blog Created Success!")
+      if (isUpdating) {
+        const data = { id: bCatId, bCategory: values}
+        dispatch(updateBCategory(data));
+        setTimeout(() => {
           navigation('/admin/blogs-category')
-        }
-      }, 2000)
+        }, 1000);
+      } else {
+        dispatch(createBCategory(values))
+      }
+      if(isError) {
+        toast.success(message)
+      }
       formik.resetForm();
     },
   });

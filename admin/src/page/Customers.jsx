@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { getUsers } from '../features/customers/customerSlice';
 import { Link } from 'react-router-dom';
-import { FaEdit } from 'react-icons/fa';
+import { FaClipboardList, FaEdit } from 'react-icons/fa';
 import { MdDelete } from 'react-icons/md';
 
 const columns = [
@@ -48,6 +48,9 @@ const Custumers = () => {
         <>
           <Link to='/' className='table-action'>
             <FaEdit size={20} />
+          </Link>
+          <Link to={`/admin/orders/${customersState[i]._id}`}>
+            <FaClipboardList className='table-action' size={20}/>
           </Link>
           <Link to='/' className='table-action'>
             <MdDelete size={20} />

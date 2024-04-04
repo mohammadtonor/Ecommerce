@@ -15,7 +15,7 @@ export const createBlog = asyncHandler(async (req, res) => {
 
 export const getAllBlogs = asyncHandler(async (req, res) => {
     try {
-        const blogs = await Blog.find();
+        const blogs = await Blog.find().populate('category', ['title']);
         res.status(200).json(blogs);
     } catch (error) {
         throw new Error(error);

@@ -14,7 +14,7 @@ router.put('/add-cart', authMiddleware, AddToCard);
 router.get('/get-cart', authMiddleware, getUserCart);
 router.get('/empty-cart', authMiddleware, emptyCart);
 router.put('/apply-coupon', authMiddleware, applyCoupon);
-router.get('/get-orders', authMiddleware, getUserOrders);
+router.get('/get-user-orders/:id', authMiddleware, getUserOrders);
 router.get('/getAll-orders', authMiddleware, getAllOrders);
 
 router.get('/:id',authMiddleware,isAdmin, getUserById);

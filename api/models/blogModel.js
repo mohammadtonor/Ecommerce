@@ -11,8 +11,8 @@ const blogShema = new mongoose.Schema({
         required: true,
     },
     category: {
-        type: String,
-        required: true,
+        type: ObjectId,
+        ref: "BlogCategory"
     },
     numViews: {
         type: Number,
