@@ -10,7 +10,6 @@ const config = {
 };
 
 const uploadImage = async (data) => {
-    console.log(config);
     const response = await axios.put(`${BASE_URL}upload`, data, config);
     return response.data;
 }

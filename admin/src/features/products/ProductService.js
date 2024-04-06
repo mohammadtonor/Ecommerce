@@ -18,11 +18,27 @@ const addProduct = async (productData) => {
     return response.data;
 }
 
- 
+const getOneProduct = async (id) => {
+    const response = await axios.get(`${BASE_URL}products/${id}`)
+    return response.data;
+}
+
+const updateOneProduct = async (id, productData) => {
+    const response = await axios.put(`${BASE_URL}products/${id}`, productData, config)
+    return response.data;
+}
+
+const deleteOneProduct = async (id) => {
+    const response = await axios.delete(`${BASE_URL}products/${id}`, config);
+    return response.data;
+}
 
 const productService = {
     getProducts,
     addProduct,
+    getOneProduct,
+    updateOneProduct,
+    deleteOneProduct
 }
 
 export default productService;

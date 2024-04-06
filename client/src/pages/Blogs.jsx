@@ -5,8 +5,19 @@ import FilterCard from '../components/our-store/filter/FilterCard';
 import FilterCategory from '../components/our-store/filter/FilterCategory';
 import BlogCard from '../components/Home/BlogeCard';
 import Container from '../components/Container';
+import {useDispatch, useSelector} from 'react-redux';
+import { useEffect } from 'react';
+import { getBlogcategories, getBlogs } from '../features/blog/blogSlice';
+
 
 const Blogs = () => {
+  const dispatch = useDispatch()
+  useEffect(() => {
+      dispatch(getBlogcategories());
+      dispatch(getBlogs());
+  }, [])
+  const {blogs, blogcategories} = useSelector(state => state.blogs)
+
   return (
     <>
         <Meta title='Our Blog'/>
@@ -15,14 +26,13 @@ const Blogs = () => {
             <div className="flex-wrapper">
                 <div>
                     <FilterCard title='Find By Category'>
-                            <FilterCategory />
+                            <FilterCategory items={blogcategories}/>
                     </FilterCard>
                 </div>
-
                 <div className="blog-lists">
-                    <BlogCard />
-                    <BlogCard />
-                    
+                    { blogs?.length > 0 &&  blogs?.map(blog => (
+                        <BlogCard item={blog} key={blog._id}/>
+                    ))}                    
                 </div>
             </div>
         </Container>

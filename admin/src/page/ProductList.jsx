@@ -72,7 +72,7 @@ const ProductList = () => {
       }, ''),
       action: (
         <>
-          <Link to='/' className='table-action'>
+        <Link to={`/admin/products/${productState[i]._id}`} className='table-action'>
             <FaEdit size={20} />
           </Link>
           <Link to='/' className='table-action'>

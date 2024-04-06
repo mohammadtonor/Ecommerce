@@ -9,10 +9,19 @@ import SortOptions from '../components/our-store/filter/SortOptians'
 import { useState } from 'react'
 import ProductCard from './../components/Home/ProductCard';
 import Container from '../components/Container'
+import {useDispatch, useSelector} from 'react-redux';
+import { useEffect } from 'react'
+import { getProducts } from '../features/products/productSlice'
 
 const OurStore = () => {
   const [grid, setGrid] = useState(1);
- 
+  const dispatch = useDispatch();
+  const { products } = useSelector(state => state.product);
+
+  useEffect(() => {
+    dispatch(getProducts());
+  } ,[])
+
   const gridSetter = (i) => {
     setGrid(i);
   }
@@ -39,10 +48,9 @@ const OurStore = () => {
                 <div className="srore-prod-lists">
                     <SortOptions gridSetter={gridSetter}/>
                     <div className={`flex-list-products`}>
-                        <ProductCard grid={grid}/>
-                        <ProductCard grid={grid}/>
-                        <ProductCard grid={grid}/>
-                        <ProductCard grid={grid}/>
+                        {products?.length > 0 && products?.map(product => (
+                            <ProductCard key={product._id} data={product} grid={grid}/>
+                        ))}
                     </div>
                 </div>
             </div>

@@ -1,12 +1,12 @@
 import './filterCategory.scss'
-const FilterCategory = () => {
+const FilterCategory = ({items}) => {
   return (
     <div className='filte-category'>
         <ul className='filte-category'>
-            <li>Mobile</li>
-            <li>laptop</li>
-            <li>watch</li>
-            <li>tv</li>
+          {items?.length > 0 && items?.map((item) => (
+            <li key={item._id}>{item?.title}</li>
+          ))}
+            
         </ul>
     </div>
   )

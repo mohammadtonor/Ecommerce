@@ -1,4 +1,4 @@
-import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
+import {createSlice, createAsyncThunk, createAction} from '@reduxjs/toolkit';
 import productService from './ProductService';
 
 export const getProducts = createAsyncThunk(
@@ -23,13 +23,50 @@ export const addProduct = createAsyncThunk(
     }
 )
 
+export const getOneProduct = createAsyncThunk(
+    'product/getOneProduct',
+    async (id, thunkAPI) => {
+        try {
+            return await productService.getOneProduct(id);
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error)
+        }
+    }
+)
+
+export const updateOneProduct = createAsyncThunk(
+    'product/updateOneProduct',
+    async ({id, productData}, thunkAPI) => {
+        try {
+            return await productService.updateOneProduct(id, productData);
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error)
+        }
+    }
+)
+
+export const deleteOneProduct = createAsyncThunk(
+    'product/deleteOneProduct',
+    async (id, thunkAPI) => {
+        try {
+            return await productService.deleteOneProduct(id);
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error)
+        }
+    }
+)
+
+export const resetProduct = createAction("ResetProduct")
+
 const initialState = {
     products: [],
     createdProduct: null,
     isError: false,
     isLoading: false,
     isSuccess: false,
-    message: ""
+    message: "",
+    productData: null,
+    updatedProduct: null,
 }
 
 export const productSlice = createSlice({
@@ -74,6 +111,60 @@ export const productSlice = createSlice({
                     state.isSuccess = false;
                     state.message = action.error;
             })
+            .addCase(getOneProduct.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(getOneProduct.fulfilled,
+                (state, action) => {
+                    state.isLoading = false;
+                    state.isError = false;
+                    state.isSuccess = true;
+                    state.productData = action.payload;
+            })
+            .addCase(getOneProduct.rejected,
+                (state, action) => {
+                    state.isLoading = false;
+                    state.isError = true;
+                    state.isSuccess = false;
+                    state.message = action.error;
+            })
+            .addCase(updateOneProduct.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(updateOneProduct.fulfilled,
+                (state, action) => {
+                    state.isLoading = false;
+                    state.isError = false;
+                    state.isSuccess = true;
+                    state.updatedProduct = action.payload;
+            })
+            .addCase(updateOneProduct.rejected, 
+                (state, action) => {
+                    state.isLoading = false;
+                    state.isError = true;
+                    state.isSuccess = false;
+                    state.message = action.error;
+                }
+            )
+            .addCase(deleteOneProduct.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(deleteOneProduct.fulfilled,
+                (state, action) => {
+                    state.isLoading = false;
+                    state.isError = false;
+                    state.isSuccess = true;
+                    state.message = action.payload;
+            })
+            .addCase(deleteOneProduct.rejected,
+                (state, action) => {
+                    state.isLoading = false;
+                    state.isError = true;
+                    state.isSuccess = false;
+                    state.message = action.error;
+            
+            })
+            .addCase(resetProduct, () => initialState)
     }
 })
 

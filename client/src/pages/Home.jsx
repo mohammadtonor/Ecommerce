@@ -9,8 +9,21 @@ import SpecialCard from '../components/Home/SpecialCard';
 import FamousCard from '../components/Home/FamousCard';
 import Container from '../components/Container';
 import ProductCard from './../components/Home/ProductCard';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { getBlogs } from '../features/blog/blogSlice';
+import { getProducts } from '../features/products/productSlice';
 
 const Home = () => {
+    const dispatch = useDispatch();
+    const blogState = useSelector((state) => state.blogs.blogs);
+    const productState = useSelector((state) => state.product.products)
+
+    useEffect(() => {
+        dispatch(getBlogs());
+        dispatch(getProducts());
+    }, [])
+
     return (
         <>
             <Container class1='home-wrapper-1 py-5'>
@@ -25,50 +38,38 @@ const Home = () => {
             <Container class1='featured-wrapper py-5 home-wrapper-2'>
                     <h1 className='py-2 blog-heading'>Featured Products</h1>
                     <div className="product-flex">
-                        <ProductCard />
-                        <ProductCard />
-                        <ProductCard />
-                        <ProductCard />
-                        <ProductCard />
-                        <ProductCard />
+                        {productState?.map(product => {
+                            if(product.tag === 'featured') {
+                                return <ProductCard data={product} key={product._id}/>
+                            }
+                        })}
+                        
                     </div>
             </Container>
             <Container class1="famous-wrapper home-wrapper-2 py-5">
                     <div className="famous-flex">
-                        <FamousCard
-                            imageSrc={'/images/spaeker04.jpg'}
-                            category={'Blue Screan'}
-                            title='Smart watch Series 7'
-                            price='From $100 or 12.5/month'
-                        />
-                        <FamousCard 
-                            imageSrc={'/images/spaeker.jfif'}
-                            category={'Blue Screan'}
-                            title='Smart watch Series 7'
-                            price='From $100 or 12.5/month'
-                        />
-                        <FamousCard 
-                            imageSrc={'/images/spaeker.jfif'}
-                            category={'Blue Screan'}
-                            title='Smart watch Series 7'
-                            price='From $100 or 12.5/month'
-                        />
-                        <FamousCard 
-                            imageSrc={'/images/spaeker.jfif'}
-                            category={'Blue Screan'}
-                            title='Smart watch Series 7'
-                            price='From $100 or 12.5/month'
-                        />
+                        {productState?.map((product, index) => {
+                            if(index < 4) {
+                                return (
+                                    <FamousCard
+                                        imageSrc={'/images/spaeker04.jpg'}
+                                        category={'Blue Screan'}
+                                        title='Smart watch Series 7'
+                                        price='From $100 or 12.5/month'
+                                    />
+                                )
+                            }
+                        })}
                     </div>
             </Container>
             <Container class1='popular-wrapper py-5 home-wrapper-2'>
                 <h1 className='py-2 blog-heading'>Popular Products</h1>
                 <div className="product-flex">
-                    <FeaturedCard />
-                    <FeaturedCard />
-                    <FeaturedCard />
-                    <FeaturedCard />
-                    <FeaturedCard />
+                    {productState?.length > 0 && productState.map((product, index) => {
+                        if(index < 5) {
+                            return <FeaturedCard  data={product} key={product._id}/>
+                        }
+                    })}
                     <FeaturedCard />
                 </div>
             </Container>
@@ -86,10 +87,12 @@ const Home = () => {
             <Container class1='blog-wrapper py-5 home-wrapper-2'>
                 <h1 className='py-2 blog-heading'>Latest Blogs</h1>
                 <div className="blog-flex">
-                    <BlogeCard />
-                    <BlogeCard />
-                    <BlogeCard />
-                    <BlogeCard />
+                    {blogState?.length > 0 && blogState.map((item, index) => {
+                            if(index < 3) {
+                                return <BlogeCard key={item._d} item={item}/>
+                            } 
+                        })}
+                    
                     </div>
             </Container>
             

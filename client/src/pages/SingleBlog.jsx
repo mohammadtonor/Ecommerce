@@ -1,12 +1,25 @@
 import Meta from '../components/Meta';
 import './singleBlog.scss';
 import BreadCrump from '../components/BreadCrump';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { FaArrowLeftLong, FaLinkedin, FaTelegram } from "react-icons/fa6";
 import { FaFacebookSquare } from "react-icons/fa";
 import Container from '../components/Container';
+import {useDispatch, useSelector} from 'react-redux';
+import { useEffect } from 'react';
+import { getBlogcategories, getOneBlog } from '../features/blog/blogSlice';
+import {format} from 'date-fns';
 
 const SingleBlog = () => {
+  const {id :blogId} = useParams();
+  const dispatch = useDispatch();
+  const {blogData, blogcategories} = useSelector(state => state.blogs)
+
+  useEffect(() => {
+    dispatch(getOneBlog(blogId))
+    dispatch(getBlogcategories())
+  }, [])
+
   return (
     <>
         <Meta title='Single blog'/>
@@ -17,27 +30,27 @@ const SingleBlog = () => {
                     <div className="single-sidebar">
                         <h3>Search by:</h3>
                         <ul>
-                            <li>new brand</li>
-                            <li>review</li>
-                            <li>top model</li>
-                            <li>top brand</li>
+                            {blogcategories?.length > 0 
+                            && blogcategories?.map((item) => (
+                                <li key={item._id}>{item?.title}</li>
+                            ))}
+                    
                         </ul>
                     </div>
                 </div>
                 <div className="single-main">
                     <div>
-                        <h2>Blog title</h2>
+                        <h2>{blogData?.title}</h2>
                     </div>
                     <div>
                         <img src="/images/blog.avif" alt="blog" />
                     </div>
-                    <p>
-                        lurem ipsum dolor sit amet, consectetur adipiscing elit. Nulla convallis, justo ac
-                        consectetur tincidunt, nunc purus ultricies nunc, nec tincidunt nunc turpis nec
-                        mauris. Sed nec elit in nunc tincidunt tincidunt. Quisque nec odio at elit
+                    <p
+                        dangerouslySetInnerHTML={{__html:  blogData?.description}}
+                    >
                     </p>
                     <div className='single-date-author'>
-                            <span>11 mar 2024</span>
+                            <span>{format(new Date(blogData?.createdAt), "dd MMM yyyy")}</span>
                             <span>Author</span>
                         
                     </div>

@@ -314,8 +314,8 @@ export const updatePassword = asyncHandler(async (req, res) => {
     try {
         const findUser = await User.findById(_id)
             .select("whashlist")
-            .populate("whashlist", ["title", "category","price"]);
-        res.json(findUser);
+            .populate("whashlist", ["title","price", "images"]);
+        res.json(findUser.whashlist);
     } catch (error) {
         throw new Error(error)
     } 

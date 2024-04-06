@@ -51,6 +51,7 @@ function App() {
           <Route path='customers' element={<Custumers />}/>
           <Route path='products' element={<ProductList />}/>
           <Route path='products/new' element={<AddProducts />}/>
+          <Route path='products/:id' element={<AddProducts />}/>
           <Route path='product-category/new' element={<AddProductCat />}/>
           <Route path='product-category/:id' element={<AddProductCat />}/>
           <Route path='colors' element={<Colors />}/>

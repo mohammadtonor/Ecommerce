@@ -103,6 +103,7 @@ export const addToWishList = asyncHandler(async (req, res) => {
         const  {_id } = req.user;
         const { prodId } = req.body;
         const user = await User.findById(_id);
+        console.log(_id, prodId);
         const alreadyAdded = user.whashlist.find(id => id.toString() === prodId.toString());
         let updatdUser;
         if(alreadyAdded) {
@@ -114,7 +115,8 @@ export const addToWishList = asyncHandler(async (req, res) => {
                 $push: { whashlist: prodId }
             }, {new: true})
         }
-        res.json(updatdUser);
+        const userInfo = await updatdUser.populate('whashlist', ['_id' , 'title'])
+        res.json(userInfo);
     } catch (error) {
         throw new Error(error)
     }

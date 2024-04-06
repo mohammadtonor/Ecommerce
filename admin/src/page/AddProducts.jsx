@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import {useNavigate} from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import CustomInput from '../components/CustomInput'
@@ -11,34 +11,43 @@ import { array, number, object, string } from 'yup';
 import { getcategories } from '../features/category/categorySlice';
 import { getBrands } from '../features/brands/BrandSlice';
 import {getColors } from '../features/colors/ColorSlice';
-import { addProduct } from '../features/products/ProductSlice';
+import { addProduct, getOneProduct, resetProduct, updateOneProduct } from '../features/products/ProductSlice';
 import Dropzone from 'react-dropzone';
-import { deleteImage, uploadImage } from '../features/upload/uploadSlice';
+import { deleteImage, uploadImage, updateImages,resetImages } from '../features/upload/uploadSlice';
+import {useParams} from 'react-router-dom'
 
 const AddProducts = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const {id: productId } = useParams();
+  
+  useEffect(() =>{
+    if(!!productId) {
+      dispatch(getOneProduct(productId))
+    } else {
+      dispatch(resetProduct())
+    }
+  }, [productId] )
   
   useEffect(() => {
     dispatch(getcategories());
     dispatch(getBrands());
     dispatch(getColors());
-    
   }, []);
-
-  const imagesState = useSelector(state => state.upload.images); 
   
-
+  
+  
+  const { createsProduct, productData, updatedProduct, isLoading} = useSelector(state => state.product);
   const categoryState = useSelector(state => state.category.categories);
   const brandState = useSelector(state => state.brand.brands);
   const colorState = useSelector(state => state.color.colors);
-  const {isSuccess, isError, isLoading, createsProduct} = useSelector(state => state.product);
 
-  useEffect(() => {
-    if (isLoading) {
-      message.loading('creating product...')
-    }
-  })
+useEffect(() => {
+  dispatch(updateImages(productData?.images));
+  
+}, [productData]);
+
+const imagesState = useSelector(state => state.upload.images); 
 
   const colors = [];
   colorState.map((color) => (
@@ -61,22 +70,28 @@ const AddProducts = () => {
   });
 
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      title: '',
-      description: null,
-      price: '',
-      quantity: '',
-      category: '',
-      tag: '',
-      brand: '',
-      colors: '',
-      images: imagesState
+      title: productData?.title || '',
+      description: productData?.description || '',
+      price: productData?.price || '',
+      quantity: productData?.quantity || '',
+      category: productData?.category || '',
+      tag: productData?.tag || '',
+      brand: productData?.brand || '',
+      colors: productData?.colors || '',
+      images: imagesState || ''
     },
     validationSchema: userSchema,
     onSubmit: (values) => {
-      //dispatch(addProduct(values));
+      if (!!productId) {
+        const data = {id: productId, productData: values}
+        dispatch(updateOneProduct(data))
+      }else {
+        dispatch(addProduct(values));
+      }
       console.log(values);
-      if (isSuccess && createsProduct) {
+      if (isSuccess) {
         message.success("Product added successfully!")
         setTimeout(() => {
           navigate('/admin/products')
@@ -97,24 +112,24 @@ const AddProducts = () => {
             id="title" 
             label={"Enter Product Title"} 
             type={"text"} 
-            val={formik.values.title}
+            val={formik.values?.title}
             onChange={formik.handleChange('title')}
             onBlur={formik.handleBlur('title')}
           />
           <div className="error">
-            {formik.touched.title && formik.errors.title ? (
+            {formik.touched?.title && formik.errors?.title ? (
               <div className="">{formik.errors.title}</div>
             ) : null}
           </div>
           <div  className='mt-3'/>
           <ReactQuill 
             theme="snow"
-            value={formik.values.description}
+            value={formik.values?.description}
             onChange={formik.handleChange('description')} 
           />
           <div className="error">
-            {formik.touched.description && formik.errors.description ? (
-              <div className="mb-2">{formik.errors.description}</div>
+            {formik.touched?.description && formik.errors?.description ? (
+              <div className="mb-2">{formik.errors?.description}</div>
             ) : null}
           </div>
           <div  className='mt-3'/>
@@ -122,13 +137,13 @@ const AddProducts = () => {
             label={"Enter Product Price"}
             type={"number"}
             name={"price"}
-            val={formik.values.price}
+            val={formik.values?.price}
             onChange={formik.handleChange('price')}
             onBlur={formik.handleBlur('price')}
           />
           <div className="error">
-            {formik.touched.price && formik.errors.price ? (
-              <div className="mb-2">{formik.errors.price}</div>
+            {formik.touched?.price && formik.errors?.price ? (
+              <div className="mb-2">{formik.errors?.price}</div>
             ) : null}
           </div>
           <div  className='mt-3'/>
@@ -136,13 +151,13 @@ const AddProducts = () => {
             label={"Enter Product Quantity"}
             type={"number"}
             name={"quantity"}
-            val={formik.values.quantity}
+            val={formik.values?.quantity}
             onChange={formik.handleChange('quantity')}
             onBlur={formik.handleBlur('quantity')}
           />
           <div className="error">
-            {formik.touched.quantity && formik.errors.quantity ? (
-              <div className="mb-2">{formik.errors.quantity}</div>
+            {formik.touched?.quantity && formik.errors?.quantity ? (
+              <div className="mb-2">{formik.errors?.quantity}</div>
             ) : null}
           </div>
           <Select
@@ -151,14 +166,15 @@ const AddProducts = () => {
             className="select-input"
             placeholder="Please Select Category"
             onChange={formik.handleChange('category')}
-            options={categoryState.map((category) => ({
+            options={categoryState?.map((category) => ({
               value: category._id,
               label: category.name
             }))}
+            value={formik.values?.category}
           />
           <div className="error">
-            {formik.touched.category && formik.errors.category ? (
-              <div className="mb-2">{formik.errors.category}</div>
+            {formik.touched?.category && formik.errors?.category ? (
+              <div className="mb-2">{formik.errors?.category}</div>
             ) : null}
           </div>
           <Select
@@ -169,13 +185,14 @@ const AddProducts = () => {
             options={[
               {value: "featured",label: "Featured"},
               {value: "speciald",label: "Special"},
-              {value: "featured",label: "Featured"},
+              {value: "famous",label: "Famous"},
             ]}
             onChange={formik.handleChange('tag')}
+            value={formik.values?.tag}
           />
           <div className="error">
-            {formik.touched.tag && formik.errors.tag ? (
-              <div className="mb-2">{formik.errors.tag}</div>
+            {formik.touched?.tag && formik.errors?.tag ? (
+              <div className="mb-2">{formik.errors?.tag}</div>
             ) : null}
           </div>
           <Select
@@ -183,15 +200,16 @@ const AddProducts = () => {
             name="brand"
             placeholder="Please Select Brand"
             className="select-input"
-            options={brandState.map((brand) => ({
+            options={brandState?.map((brand) => ({
               value: brand._id,
               label: brand.title
             }))}
             onChange={formik.handleChange('brand')}
+            value={formik.values?.brand}
           />
           <div className="error">
-            {formik.touched.brand && formik.errors.brand ? (
-              <div className="mb-2">{formik.errors.brand}</div>
+            {formik.touched?.brand && formik.errors?.brand ? (
+              <div className="mb-2">{formik.errors?.brand}</div>
             ) : null}
           </div>
           <Select
@@ -201,10 +219,11 @@ const AddProducts = () => {
             name="colors"
             onChange={(e) => formik.setFieldValue('colors', e)}
             options={colors}
+            value={formik.values?.colors}
           />
           <div className="error">
-            {formik.touched.colors && formik.errors.colors ? (
-              <div className="mb-2">{formik.errors.colors}</div>
+            {formik.touched?.colors && formik.errors?.colors ? (
+              <div className="mb-2">{formik.errors?.colors}</div>
             ) : null}
           </div>
           <div className="mt-4" />
