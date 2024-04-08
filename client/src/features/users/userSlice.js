@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import userService from './userService';
-import { getCustomerfromStorage } from '../../utils/configToken';
+import { config, getCustomerfromStorage } from '../../utils/configToken';
+import {toast} from 'react-toastify';
 
 export const regiterUser = createAsyncThunk(
     'auth/registerUser',
@@ -35,12 +36,57 @@ export const getProductWhishlist = createAsyncThunk(
     }
 )
 
+export const addToCart = createAsyncThunk(
+    'auth/addToCart',
+    async (product, thunkAPI) => {
+        try {
+            return await userService.addToCart(product);
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error)
+        }
+    }
+)
+
+export const getPrroductCarts = createAsyncThunk(
+    'auth/getPrroductCarts',
+    async (thunkAPI) => {
+        try {
+            return await userService.getPrroductCarts();
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error)
+        }
+    }
+)
+
+export const removeFromCart = createAsyncThunk(
+    'auth/removeFromCart',
+    async (cartId, thunkAPI) => {
+        try {
+            return await userService.removeFromCard(cartId);
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error)
+        }
+    }
+)
+
+export const updateCartItem = createAsyncThunk(
+    'auth/updateCartItem',
+    async (cartItem, thunkAPI) => {
+        try {
+            return await userService.updateCartItem(cartItem);
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error)
+        }
+    }
+)
+
 const initialState = {
     user: getCustomerfromStorage,
     isSuccess: false,
     isLoading: false,
     isError: false,
     message: "",
+    cartProducts: null,
 }
 
 export const authSlice = createSlice({
@@ -103,6 +149,85 @@ export const authSlice = createSlice({
                     state.isError = true;
                     state.isSuccess = false;
                     state.message = action.error;
+            })
+            .addCase(addToCart.pending, 
+                (state,) => {
+                    state.isLoading = true;
+            })
+            .addCase(addToCart.fulfilled, 
+                (state, action) => {
+                    state.isLoading = false;
+                    state.isSuccess = true;
+                    state.isError = false;
+                    state.cartProducts = action.payload
+                    if (state.isSuccess) {
+                        toast.success("Product added to cart successfully")
+                    }
+            })
+            .addCase(addToCart.rejected, 
+                (state, action) => {
+                    state.isLoading = false;
+                    state.isError = true;
+                    state.isSuccess = false;
+                    state.message = action.error;
+            })
+            .addCase(getPrroductCarts.pending, 
+                (state) => {
+                    state.isLoading = true;
+            })
+            .addCase(getPrroductCarts.fulfilled, 
+                (state, action) => {
+                    state.isLoading = false;
+                    state.isSuccess = true;
+                    state.isError = false;
+                    state.cartProducts = action.payload
+            })
+            .addCase(getPrroductCarts.rejected, 
+                (state, action) => {
+                    state.isLoading = false;
+                    state.isError = true;
+                    state.isSuccess = false;
+                    state.message = action.error;
+            })
+            .addCase(removeFromCart.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(removeFromCart.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.isError = false;
+                state.cartProducts = state.cartProducts?.filter(cart => cart._id !== action.payload?._id)
+                if(state.isSuccess) {
+                    toast.success("Product Removed Successfully!")
+                }
+            })
+            .addCase(removeFromCart.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+            })
+            .addCase(updateCartItem.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(updateCartItem.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.isError = false;
+                state.cartProducts = state.cartProducts?.map(cart => 
+                    cart._id === action.payload._id
+                        ? action.payload 
+                        : cart
+                    )
+                if(state.isSuccess) {
+                    toast.success("Product Updated Successfully!")
+                }
+            })
+            .addCase(updateCartItem.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
             })
     } 
 })

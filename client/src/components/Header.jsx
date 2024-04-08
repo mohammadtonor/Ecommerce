@@ -5,8 +5,13 @@ import { MdFavoriteBorder   } from "react-icons/md";
 import { FaRegUser } from "react-icons/fa";
 import { SlBasket } from "react-icons/sl";
 import { CgMenuGridO } from "react-icons/cg";
+import { useSelector } from "react-redux";
 
 const Header = () => {
+  const cartState = useSelector(state => state.auth.cartProducts);
+
+  const totalQuantity = Array.isArray(cartState) && cartState?.reduce((acc, curr) => curr?.quantity + acc, 0);
+  const totalAmount = Array.isArray(cartState) && cartState?.reduce((acc, curr) => curr?.price + acc, 0);
   return (
     <>
       <header className="header-top-strip py-3 pb-0">
@@ -71,8 +76,8 @@ const Header = () => {
                   <Link to={'/cart'} className="d-flex text-white">
                     <SlBasket className="fs-3 mt-1" />
                       <div className="header-upper-links-basket">
-                        <span className="badge bg-white text-dark">0</span>
-                        <span className="fs4">$500</span>
+                        <span className="badge bg-white text-dark">{totalQuantity === 0 ? 0 : totalQuantity}</span>
+                        <span className="fs4">${totalAmount == 0 ? 0 : totalAmount}</span>
                       </div>                   
                   </Link>
                 </div>

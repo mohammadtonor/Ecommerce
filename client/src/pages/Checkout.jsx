@@ -1,8 +1,50 @@
 import './checkout.scss';
 import Meta from '../components/Meta';
 import { Link } from 'react-router-dom';
+import {useSelector} from 'react-redux';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import {object, string} from 'yup'
+import {useFormik} from 'formik';
+
+const infoSchema = object({
+    firstName: string().required('FirstName is required'),
+    lastName: string().required('LastName is required'),
+    address: string().required('Adress is required'),
+    city: string().required('City is required'),
+    state: string().required('State is required'),
+    zipCode: string().required('Zip is required'),
+    country: string().required('Country is required'),
+})
 
 const Checkout = () => {
+  const cartState = useSelector(state => state.auth.cartProducts);
+  const [subtotal, setSubtotal] = useState(0);
+
+  useEffect(() => {
+    setSubtotal(cartState?.reduce((acc, cur) => {
+      return acc + cur.price;
+    }, 0));
+  }, [cartState])
+
+  const formik = useFormik({
+    initialValues: {
+        firstName: '',
+        lastName: '',
+        address: '',
+        other: '',
+        city: '',
+        state: '',
+        country: '',
+        zipCode: '',
+        country: '',
+    },
+    validationSchema: infoSchema,
+    onSubmit: (values) => {
+
+    }
+  })
+
   return (
     <>
         <Meta title='Checkout'/>
@@ -35,41 +77,128 @@ const Checkout = () => {
                                 <span>Eail me about special offers</span>
                             </div>
                         </div>
-                        <form action="" className='checkout-left-data__form'>
+                        <form onSubmit={formik.handleSubmit} action="" className='checkout-left-data__form'>
                             <h5 >Shipping Adress</h5>
                             <div className="form-goup">
-                                <select>
-                                    <option value="1">Shipping Address 1</option>
-                                    <option value="2">Shipping Address 2</option>
-                                    <option value="3">Shipping Address 3</option>
+                                <select
+                                    id='country'
+                                    placeholder='Please select a country'
+                                    value={formik.values.country}
+                                    onChange={formik.handleChange('country')}
+                                    onBlur={formik.handleBlur('country')}
+                                    defaultValue={formik.values.country}
+                                >
+                                    <option value={null}>Select a Country</option>
+                                    <option value="1">Iran</option>
+                                    <option value="2">UAE</option>
+                                    <option value="3">USA</option>
                                 </select>
-                            </div>
-                            <div className="form-goup">
-                                <label htmlFor="shipping adress"></label>
-                                <select>
-                                    <option value="1">Shipping Address 1</option>
-                                    <option value="2">Shipping Address 2</option>
-                                    <option value="3">Shipping Address 3</option>
-                                </select>
+                                <div className="error">
+                                    {formik.touched?.country && formik.errors?.country ? (
+                                        <div className='mb-2'>{formik.errors.country}</div>
+                                    ) : null}
+                                </div> 
                             </div>
                             <div className='form-group-name'>
-                                <input type="text" id="firstName" placeholder="FirstName (Optional)" />
-                                <input type="text" id="lastName" placeholder="LastName (Optional)" />
+                                <input 
+                                    type="text" 
+                                    id="firstName" 
+                                    placeholder="FirstName (Optional)" 
+                                    value={formik.values.firstName}
+                                    onChange={formik.handleChange('firstName')}
+                                    onBlur={formik.handleBlur('firstName')}
+                                />
+                                <input 
+                                    type="text" 
+                                    id="lastName" 
+                                    placeholder="LastName (Optional)" 
+                                    value={formik.values.lastName}
+                                    onChange={formik.handleChange('lastName')}
+                                    onBlur={formik.handleBlur('lastName')}
+                                />
+                                
                             </div>
+                            <div className='d-flex justify-content-between text-red'>
+                                <div className="error">
+                                    {formik.touched?.firstName && formik.errors?.firstName ? (
+                                        <div className='mb-2'>{formik.errors.firstName}</div>
+                                    ) : null}
+                                </div> 
+                                <div className="error">
+                                    {formik.touched?.lastName && formik.errors?.lastName ? (
+                                        <div className='mb-2'>{formik.errors.lastName}</div>
+                                    ) : null}
+                                </div>
+                            </div> 
                             <div className='form-group'>
-                                <input type="text" id="address" placeholder="Address " />
+                                <input 
+                                    type="text" 
+                                    id="address" 
+                                    placeholder="Address " 
+                                    value={formik.values.address}
+                                    onChange={formik.handleChange('address')}
+                                    onBlur={formik.handleBlur('address')}
+                                />
                             </div>
+                            <div className="error mb-0 p-0">
+                                    {formik.touched?.address && formik.errors?.address ? (
+                                        <div className='mb-2'>{formik.errors.address}</div>
+                                    ) : null}
+                            </div> 
                             <div className='form-group'>
-                                <input type="text" id="appartment" placeholder="Apartment Suit (optional)" />
+                                <input 
+                                    type="text" 
+                                    id="other" 
+                                    placeholder="Apartment Suit (optional)" 
+                                    value={formik.values.other}
+                                    onChange={formik.handleChange('other')}
+                                />
                             </div>
                             <div className='form-group-city'>
-                                <input type="text" id="city" placeholder="City " />
-                                <input type="text" id="state" placeholder="State " />
-                                <input type="number" id="zipcode" placeholder="Address " />
+                                <input 
+                                    type="text" 
+                                    id="city" 
+                                    placeholder="City " value={formik.values.city}
+                                    onChange={formik.handleChange('city')}
+                                    onBlur={formik.handleBlur('city')}
+                                />
+                                <input 
+                                    type="text" 
+                                    id="state" 
+                                    placeholder="State " 
+                                    value={formik.values.state}
+                                    onChange={formik.handleChange('state')}
+                                    onBlur={formik.handleBlur('state')}
+                                />
+                                <input 
+                                    type="text" 
+                                    id="zipCode" 
+                                    placeholder="pinCode " 
+                                    value={formik.values.zipCode}
+                                    onChange={formik.handleChange('zipCode')}
+                                    onBlur={formik.handleBlur('zipCode')}
+                                /> 
                             </div>
+                            <div className='d-flex justify-content-between text-red'>
+                                    <div className="error">
+                                        {formik.touched?.city && formik.errors?.city ? (
+                                            <div className='mb-2'>{formik.errors.city}</div>
+                                        ) : null}
+                                    </div> 
+                                    <div className="error">
+                                        {formik.touched?.state && formik.errors?.state ? (
+                                            <div className='mb-2'>{formik.errors.state}</div>
+                                        ) : null}
+                                    </div>
+                                    <div className="error">
+                                        {formik.touched?.zipCode && formik.errors?.zipCode ? (
+                                            <div className='mb-2'>{formik.errors.zipCode}</div>
+                                        ) : null}
+                                    </div>
+                                </div>
                             <div className='form-group-action'>
                                 <Link to={'/'}>Back to Cart</Link>
-                                <button>Continue to Shipping</button>
+                                <button type='button'>Continue to Shipping</button>
                             </div>
                         </form>
                         <div className='checkout-left-data__footer'>
@@ -81,43 +210,30 @@ const Checkout = () => {
                             <h3>Your Order</h3>
                         </div>
                         <div className='checkout-right-data__body'>
-                            <div className='checkout-right-data__body__item'>
-                                <div className='checkout-right-data__body__item__img'>
-                                    <span>1</span>
-                                    <img src="https://res.cloudinary.com/dajdunc2w/image/upload/v1711308011/watch_qxcpb2.jpg" alt="" />
-                                </div>
-                                <div className='checkout-right-data__body__item__name'>
-                                    <h5>apple watch for many color and size </h5>
-                                    <div>
-                                        <span>S</span>/
-                                        <span>sk323j3</span>
+                            {cartState?.length > 0 && cartState.map((item, index) => (
+                                <div key={index} className='checkout-right-data__body__item'>
+                                    <div className='checkout-right-data__body__item__img'>
+                                        <span>{item.quantity}</span>
+                                        <img src="https://res.cloudinary.com/dajdunc2w/image/upload/v1711308011/watch_qxcpb2.jpg" alt="" />
+                                    </div>
+                                    <div className='checkout-right-data__body__item__name'>
+                                        <h5>{item.productId?.title}</h5>
+                                        <div>
+                                            <span></span>
+                                            <span>{item.color.title}</span>
+                                        </div>
+                                    </div>
+                                    <div className='checkout-right-data__body__item__price'>
+                                        <h5>$ {item.price.toFixed(2)}</h5>
                                     </div>
                                 </div>
-                                <div className='checkout-right-data__body__item__price'>
-                                    <h5>$ 99.00</h5>
-                                </div>
-                            </div>
-                            <div className='checkout-right-data__body__item'>
-                                <div className='checkout-right-data__body__item__img'>
-                                <span>1</span>
-                                    <img src="https://res.cloudinary.com/dajdunc2w/image/upload/v1711308011/watch_qxcpb2.jpg" alt="" />
-                                </div>
-                                <div className='checkout-right-data__body__item__name'>
-                                    <h5>apple watch for many color and size </h5>
-                                    <div>
-                                        <span>S</span>/
-                                        <span>sk323j3</span>
-                                    </div>
-                                </div>
-                                <div className='checkout-right-data__body__item__price'>
-                                    <h5>$ 99.00</h5>
-                                </div>
-                            </div>
+                        
+                            ))}
                         </div>
                         <div className='checkout-right-data__footer'>
                             <div className='checkout-right-data__footer__subtotal'>
                                 <h5>Subtotal</h5>
-                                <p>$ 99.00</p>
+                                <p>$ {subtotal?.toFixed(2)}</p>
                             </div>
                             <div className='checkout-right-data__footer__shipping'>
                                 <h5>Shipping</h5>
@@ -125,7 +241,7 @@ const Checkout = () => {
                             </div>
                             <div className='checkout-right-data__footer__total'>
                                 <h5>Total</h5>
-                                <p>$ 99.00</p>
+                                <p>$ {(subtotal + 10)?.toFixed(2)}</p>
                             </div>
                             
                         </div>

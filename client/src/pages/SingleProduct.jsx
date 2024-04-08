@@ -7,20 +7,56 @@ import { useState } from 'react';
 import Zoom from 'react-medium-image-zoom';
 import { FaRegHeart } from "react-icons/fa";
 import { IoGitCompareOutline } from "react-icons/io5";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { LiaShippingFastSolid } from "react-icons/lia";
 import { MdContentCopy } from "react-icons/md";
 import 'react-medium-image-zoom/dist/styles.css'
 import Container from '../components/Container';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { getOneProduct } from '../features/products/productSlice';
+import { addToCart, getPrroductCarts } from '../features/users/userSlice';
 
 
 const SingleProduct = () => {
   const [createReview, setCreateReview] = useState(false);
+  const [color, setColor] = useState('')
+  const navigate = useNavigate()
+  const [quantity, setQuantity] = useState(1);
+  const [addedToCart, setAddedToCart] = useState(false)
+  const dispatch = useDispatch();
+  const {id: prodId} = useParams(); 
+  const { productData } = useSelector(state => state.product);
+  const cartState = useSelector(state => state.auth?.cartProducts);
 
+  useEffect(() => {
+    dispatch(getOneProduct(prodId))
+    dispatch(getPrroductCarts());
+  }, [])
+
+  useEffect(() => {
+    Array.isArray(cartState) &&
+    cartState?.forEach(item => {
+        if(prodId === item?.productId._id) {
+            setAddedToCart(true)
+        }
+    })
+  }, []);
   const copyTo = (copyText) => {
-    console.log(copyText);
     navigator.clipboard.writeText(copyText);
   } 
+  
+  const handleAddToCart = (id) => {
+    if(addedToCart) navigate('/cart')
+    const totalPrice = quantity * parseInt(productData?.price)
+    const data = {
+        productId: id, 
+        quantity: parseInt(quantity), 
+        price: totalPrice,
+        color,
+    };
+    dispatch(addToCart(data));
+  }
 
   return (
     <>
@@ -33,32 +69,25 @@ const SingleProduct = () => {
                         <Zoom >
                         <img
                             alt="That Wanaka Tree, New Zealand by Laura Smetsers"
-                            src="/images/watch.jfif"
+                            src={productData?.images[0]?.url}
                             width="500"
                             />
                         </Zoom>
                     </div>
                     <div className='other-image'>
-                        <div>
-                            <img src='/images/watch.jfif' alt='watch'/>
-                        </div>
-                        <div>
-                            <img src='/images/watch.jfif' alt='watch'/>
-                        </div>
-                        <div>
-                            <img src='/images/watch.jfif' alt='watch'/>
-                        </div>
-                        <div>
-                            <img src='/images/watch.jfif' alt='watch'/>
-                        </div>
+                        {productData?.images.map((image, index) => (
+                             <div>
+                                <img src={image?.url} alt='watch'/>
+                            </div>    
+                        ))}
                     </div>
                 </div>
                 <div className='product-content'>
-                    <h5>Kids HedsPhone Bulk 10 P colored for students</h5>
-                    <p>$100</p>
+                    <h5>{productData?.title}</h5>
+                    <p>$ {productData?.price}</p>
                     <div className='product-rating'>
-                        <Rating ratingValue={4} size={20} initialValue={3}/>
-                        (4 Reviews)
+                        <Rating ratingValue={4} size={20} initialValue={productData?.totalRating}/>
+                        ({productData?.totalRating} Reviews)
                     </div>
                     <div className='product-type'>
                         <h5>Type:</h5> 
@@ -66,19 +95,19 @@ const SingleProduct = () => {
                     </div>
                     <div className='product-type'>
                         <h5>brand:</h5>
-                        <span>Headphone</span>
+                        <span>{productData?.brand?.title}</span>
                     </div>
                     <div className='product-type'>
                         <h5>Category:</h5>
                         <div className="product-category">
-                            <span>Headphone</span>
+                            <span>{productData?.category?.name}</span>
                             <span>Mobile</span>
                             <span>Headphone</span>
                         </div>
                     </div>
                     <div className='product-type'>
                         <h5>Tags:</h5> 
-                        <div className='product-tags'>Headphone</div>
+                        <div className='product-tags'>{productData?.tag}</div>
                     </div>
                     <div className='product-type'>
                         <h5>SKU:</h5>
@@ -95,22 +124,38 @@ const SingleProduct = () => {
                             <span>L</span>
                         </div>
                     </div>
+                    {!addedToCart && 
                     <div className='product-color'>
                         <h5>Color</h5>
                         <div className='product-color-item'>
-                            <span></span>
-                            <span></span>
-                            <span></span>
-                            <span></span>
+                            {productData?.colors?.map(color => (
+                                <span onClick={() => {
+                                    setColor(color?._id)}}>
+                                </span>
+                            ))}
                         </div>
                     </div>
+                    }
                     <div className='product-quantity'>
-                        <div className='product-quantity-item'>
-                            Quantity
-                            <input type='number' value='1'/>
-                        </div>
+                        {!addedToCart && 
+                            <div className='product-quantity-item'>
+                                Quantity
+                                <input 
+                                    type='number'
+                                    name='quantity' 
+                                    min={1} 
+                                    value={quantity} 
+                                    onChange={(e) => setQuantity(e.target.value)}
+                                    />
+                            </div>
+                        }
                         <div className='product-quantity-button'>
-                            <button className='btn btn-primary'>Add to Cart</button>
+                            <button 
+                                className='btn btn-primary'
+                                onClick={() => handleAddToCart(productData?._id)}
+                            >
+                                {addedToCart ? 'Go to Cart' : 'Add to cart'}
+                            </button>
                             <button className='btn btn-primary'>Buy Now</button>
                         </div>
                         
@@ -267,6 +312,8 @@ const SingleProduct = () => {
             <h5>Popular Products</h5>
             <div className='popular-product-container'>
                 <div className='popular-product-card'>
+                    <ProductCard grid={1}/>
+                    <ProductCard />
                     <ProductCard />
                     <ProductCard />
                     <ProductCard />

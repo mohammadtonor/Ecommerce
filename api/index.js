@@ -45,7 +45,7 @@ app.use('/api/brands', BrandRoute);
 app.use('/api/colors', colorRoute);
 app.use('/api/coupons', couponRoute);
 app.use('/api/orders', orderRoute);
-app.use('/api/enquiry', enqRoute);
+app.use('/api/contacts', enqRoute);
 app.use('/api/upload', uploadRoute);
 
 app.use(notFound)

@@ -3,8 +3,46 @@ import Meta from '../components/Meta'
 import BreadCrump from '../components/BreadCrump';
 import { FaRegTrashAlt } from "react-icons/fa";
 import Container from '../components/Container';
+import {useDispatch, useSelector} from 'react-redux'
+import { useEffect } from 'react';
+import { getPrroductCarts, removeFromCart, updateCartItem } from '../features/users/userSlice';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Cart = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const {cartProducts} = useSelector(state => state.auth);
+  const [subtotle, setSubtotla] = useState(0);
+
+  useEffect(() => {
+    dispatch(getPrroductCarts())
+  }, []);
+
+  useEffect(() => {
+    let total = !!cartProducts && cartProducts?.reduce((acc, curr) => acc + curr.price, 0);
+    setSubtotla(total);    
+  }, [cartProducts])
+
+  const removeItemFromCart = (id) => {
+      dispatch(removeFromCart({cartId: id}))
+      setTimeout(() => dispatch(getPrroductCarts()), 50)
+    }
+    
+    const handleCartQuantity = (cartId, quantity,price, option) => {
+        if (option === 'inc') {
+        dispatch(updateCartItem({cartId, option, price}))
+    } else if (option === 'dec') {
+        if (quantity === 1 ) {
+            dispatch(removeFromCart({cartId}))
+            
+        } else {
+            dispatch(updateCartItem({cartId, option, price}))
+        }
+    }
+    setTimeout(() => dispatch(getPrroductCarts()), 100)
+   }
+
   return (
     <>
         <Meta title='Cart'/>
@@ -18,36 +56,43 @@ const Cart = () => {
                     <span>Action</span>
                     <span>total</span>
                 </div>
-                <div className="cart-item">
-                    <div className="cart-item-detail">
-                        <img src="https://res.cloudinary.com/dajdunc2w/image/upload/v1711308011/watch_qxcpb2.jpg" alt="product"/>
-                        <div className="cart-item-info">
-                            <div>product <span>name</span></div>
-                            <div>Size  <span>S</span></div>
-                            <div>color <span>X</span></div>
-                        </div>
-                    </div>
-                    <div className="cart-item-price">
-                        <span>$100</span>
-                    </div>
-                    <div className="cart-item-quantity">
-                        <div>
-                            <div>
-                                <button>+</button>
-                                <button>-</button>
+                {cartProducts && cartProducts.length > 0 && cartProducts. map((item, index) =>(                    
+                    <div key={index} className="cart-item">
+                        <div className="cart-item-detail">
+                            <img src={item?.productId?.images[0]?.url} alt="product"/>
+                            <div className="cart-item-info">
+                                <div>{item?.productId?.title}</div>
+                                <div>Size  <span>S</span></div>
+                                <div>color <span>{item?.color?.title}</span></div>
                             </div>
-                            <span>1</span>
+                        </div>
+                        <div className="cart-item-price">
+                            <span>$ {item?.productId?.price}</span>
+                        </div>
+                        <div className="cart-item-quantity">
+                            <div>
+                                <div>
+                                    <button 
+                                        onClick={() => handleCartQuantity(item._id, item?.quantity, item?.productId?.price,'inc')}
+                                    >+
+                                    </button>
+                                    <button
+                                        onClick={() => handleCartQuantity(item._id, item?.quantity, item?.productId?.price,'dec')}
+                                    >-</button>
+                                </div>
+                                <span>{item?.quantity}</span>
+                            </div>
+                        </div>
+                        <div className='cart-item-action'>
+                            <span onClick={() => removeItemFromCart(item._id)}>
+                                <FaRegTrashAlt />
+                            </span>
+                        </div>
+                        <div className="cart-item-total">
+                            <span>$ {item?.price}</span>
                         </div>
                     </div>
-                    <div className='cart-item-action'>
-                        <span>
-                            <FaRegTrashAlt />
-                        </span>
-                    </div>
-                    <div className="cart-item-total">
-                        <span>$100</span>
-                    </div>
-                </div>
+                ))}
                 <div className='cart-footer'>
                     <div className="cart-footer-left">
                         <button>continue shopping</button>
@@ -56,12 +101,12 @@ const Cart = () => {
                         <h5>Order Special introduction</h5>
                         <div>
                             <h5>subtotal</h5>
-                            <span>$100.00</span>
+                            <span>${!!subtotle && subtotle?.toFixed(2)}</span>
                         </div>                        
                     </div>
                     <div className='cart-footer-bottom'>
                         <span>Taxes and shipping cost at checkout</span>
-                        <button>checkout</button>
+                        <button onClick={() => navigate('/checkout')}>checkout</button>
                     </div>
                 </div>
             </div>

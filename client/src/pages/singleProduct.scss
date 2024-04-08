@@ -284,15 +284,14 @@
 }
 
 .popular-product-container{
-    background-color: white;
-    padding: 20px;
-    box-shadow: 0 0 10px #0000001a;
-
+    
     .popular-product-card {
+        margin-top: 20px;
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr;
-        
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+        gap: 10px;
         .product-card {
+            box-shadow: 0 0 10px #0000001a;
             box-shadow: none;
         }
     }

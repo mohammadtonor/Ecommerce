@@ -35,13 +35,11 @@ const AddBlog = () => {
   
 
   const imageState = useSelector(state => state.upload.images);
-  const [images, setImages] = useState()
   useEffect(() => {
     if(isUpdating){
       dispatch(getOneBlog(blogId));
-      dispatch(updateImages(blogData?.images));
+      
     } else {
-      dispatch(resetImages())
       dispatch(resetState())
     }
   }, [blogId])
@@ -63,6 +61,10 @@ const AddBlog = () => {
     }
   }, [isSuccess, isError, createdBlog, updatedBlog]);
 
+  useEffect(() => {
+    dispatch(updateImages(blogData?.images));
+  }, [blogData]);
+
   const schema = object({
     title: string().required('Title is required'),
     description: string().required('Description is required'),
@@ -76,7 +78,7 @@ const AddBlog = () => {
       title: blogData?.title || '',
       description: blogData?.description || '',
       category: blogData?.category || '',
-      images: images || ''
+      images: imageState || ''
     },
     validationSchema: schema,
     onSubmit: (values) => {

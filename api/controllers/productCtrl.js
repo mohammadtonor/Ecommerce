@@ -65,7 +65,7 @@ export const getAllProducts = asyncHandler(async (req, res) => {
 export const getProductById = asyncHandler(async (req, res) => {
     try {
         const { id } = req.params;
-        const product = await Product.findById(id).populate("rating.postedby", ["lastName", "firstName"]);
+        const product = await Product.findById(id).populate("rating.postedby brand colors category", ["lastName", "firstName", "title", "name"]);
         res.status(200).json(product);
     } catch (error) {
         throw new Error(error.message);

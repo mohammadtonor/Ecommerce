@@ -6,7 +6,7 @@ const BlogeCard = ({item}) => {
   return (
         <div className="blog-card">
             <div className="card-image">
-                <img src={item?.images?.url} alt="blog" />
+                <img src={item?.images[0]?.url} alt="blog" />
             </div>
             <div className="blog-card-content">
                 <p className='date'>{format(item?.createdAt, "dd MMM yyyy")}</p>

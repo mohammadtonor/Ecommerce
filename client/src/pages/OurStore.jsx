@@ -49,7 +49,7 @@ const OurStore = () => {
                     <SortOptions gridSetter={gridSetter}/>
                     <div className={`flex-list-products`}>
                         {products?.length > 0 && products?.map(product => (
-                            <ProductCard key={product._id} data={product} grid={grid}/>
+                            <ProductCard key={product._id} items={product} grid={grid}/>
                         ))}
                     </div>
                 </div>

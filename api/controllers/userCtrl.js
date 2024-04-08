@@ -343,36 +343,41 @@ export const updatePassword = asyncHandler(async (req, res) => {
 
   export const AddToCard = asyncHandler(async(req, res) => {
     const { _id } = req.user;
-    validateMongodbId(_id); //
-    const {cart} = req.body
+    validateMongodbId(_id); 
     try {
-        const user = await User.findById(_id)
+        console.log(req.body);
+        let newCart = await new Cart({
+            ...req.body,
+            userId: _id,
+        }).save();
+        
+        // const user = await User.findById(_id)
 
-        let products = [];
-        const checkCartExists = await Cart.findOneAndDelete({orderBy: user._id});
-        if (checkCartExists){
-            checkCartExists.deleteOne();
-        }
+        // let products = [];
+        // const checkCartExists = await Cart.findOneAndDelete({orderBy: user._id});
+        // if (checkCartExists){
+        //     checkCartExists.deleteOne();
+        // }
 
-        for (let i=0; i< cart.length; i++) {
-            let object = {};
-            object.product = cart[i]._id;
-            object.count = cart[i].count;
-            object.color = cart[i].color
-            const getPrice = await Product.findById(cart[i]._id).select("price")
-            object.price = getPrice.price
-            products.push(object);
-        }
-        const totalPrice = products
-            .map(product => product.price * product.count)
-            .reduce((prev, curr) => prev + curr, 0);
+        // for (let i=0; i< cart.length; i++) {
+        //     let object = {};
+        //     object.product = cart[i]._id;
+        //     object.count = cart[i].count;
+        //     object.color = cart[i].color
+        //     const getPrice = await Product.findById(cart[i]._id).select("price")
+        //     object.price = getPrice.price
+        //     products.push(object);
+        // }
+        // const totalPrice = products
+        //     .map(product => product.price * product.count)
+        //     .reduce((prev, curr) => prev + curr, 0);
 
-        const newCart = await Cart.create({
-            products,
-            cartTotal: totalPrice,
-            orderBy: user._id
-        })
-
+        // const newCart = await Cart.create({
+        //     products,
+        //     cartTotal: totalPrice,
+        //     orderBy: user._id
+        // })
+        console.log(newCart);
         res.json(newCart)
     } catch (error) {
         throw new Error(error);
@@ -382,17 +387,50 @@ export const updatePassword = asyncHandler(async (req, res) => {
   export const getUserCart = asyncHandler( async(req, res) => {
     const {_id} = req.user;
     try {
-        const cartUser = await Cart.findOne({orderBy: _id})
-            .populate( "products.product orderBy cartTotal",
-            ["_id", "title", "carrtTotal","firstName", "lastName"])
+        const cartUser = await Cart.find({userId: _id})
+            .populate( "productId userId color",
+            [ "title","firstName", "lastName", "price", 'images'])
         res.json(cartUser);
     } catch (error) {
         throw new Error(error);
     }
   })
 
-  export const emptyCart = asyncHandler( async(req, res) => {
+  export const removeFromCard = asyncHandler( async(req, res) => {
     const { _id } = req.user;
+    const {cartId} = req.body;
+    validateMongodbId(_id);
+    try {
+        const deletedCart = await Cart.deleteOne({userId: _id, _id: cartId}) 
+        res.json(deletedCart)
+    } catch (error) {
+        throw new Error(error)
+    }
+  })
+
+  export const updateCartItem = asyncHandler( async(req, res) => {
+    const { _id } = req.user;
+    const {cartId, price, option} = req.body;
+    validateMongodbId(_id);
+    console.log(price);
+    try {
+        const updatedCartItem = await Cart.updateOne(
+            {userId: _id, _id: cartId},
+            { $inc: { 
+                price: option == 'inc'? 1 * price : option == 'dec' && -1 * price,
+                quantity: option == 'inc'? 1 : option == 'dec' && -1 
+            },
+            },
+            {new: true}
+        ) 
+        res.json(updatedCartItem)
+    } catch (error) {
+        throw new Error(error)
+    }
+  })
+
+  export const emptyCart = asyncHandler( async(req, res) => {
+    const { _id } = req.user; 
     validateMongodbId(_id);
     try {
         const user = await User.findById(_id)
@@ -438,6 +476,20 @@ export const updatePassword = asyncHandler(async (req, res) => {
         res.json(orders);
     } catch (error) {
         throw new Error(error)
+    }
+  })
+
+  export const createOrder = asyncHandler( async(req, res) => {
+    //const {shippingInfo, orderItem, totalPrice, totalPriceAfterDiscount, paymentInfo} = req.body;
+    const {_id} = req.user;
+    try {
+        const order = await Order.create({
+            ...req.body,
+            userId: _id,
+        })
+        res.json(order);
+    } catch (error) {
+        throw new Error(error);
     }
   })
 

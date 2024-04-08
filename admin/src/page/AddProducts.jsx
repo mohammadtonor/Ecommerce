@@ -37,7 +37,7 @@ const AddProducts = () => {
   
   
   
-  const { createsProduct, productData, updatedProduct, isLoading} = useSelector(state => state.product);
+  const { createsProduct, productData, updatedProduct, isLoading, isSuccess, isError} = useSelector(state => state.product);
   const categoryState = useSelector(state => state.category.categories);
   const brandState = useSelector(state => state.brand.brands);
   const colorState = useSelector(state => state.color.colors);
