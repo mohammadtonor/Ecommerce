@@ -1,15 +1,16 @@
 import './loginPage.scss'
 import BreadCrump from '../components/BreadCrump';
 import Meta from '../components/Meta'
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import Container from '../components/Container';
 import CustomInput from '../components/CustomInput';
 import {useDispatch, useSelector} from 'react-redux';
 import { useEffect } from 'react';
 import { useFormik } from 'formik';
 import { object, string } from 'yup';
-import { loginUser } from '../features/users/userSlice';
+import { loginUser, resetAuth } from '../features/users/userSlice';
 import {toast} from 'react-toastify';
+import { getTokenfromStorage } from '../utils/configToken';
 
 const userShema = object({
     email: string().email().required('Email is required'),
@@ -20,16 +21,23 @@ const LoginPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   
-  const {user, isSuccess, isError} = useSelector(state => state.auth)
-
   useEffect(() => {
-    if (isSuccess && user) {
-        toast.success("User Rgistered successfully!")
+      dispatch(resetAuth())
+      console.log(!!getTokenfromStorage);
+      if(getTokenfromStorage) {
+         navigate('/')
+      }
+    } ,[]);
+
+  const {user, createdUser, isSuccess, isError} = useSelector(state => state.auth)
+  useEffect(() => {
+    if (isSuccess && createdUser) {
+        toast.success("User Rgistered successfully!");
     }
     if(isError) {
         toast.error("Something went wrong!!!")
     }
-  }, [isSuccess, isError, user])
+  }, [isSuccess, isError, createdUser])
 
   const formik = useFormik({
     initialValues: {
@@ -38,13 +46,18 @@ const LoginPage = () => {
     },
     validationSchema: userShema,
     onSubmit: (values) => {
-        dispatch(loginUser(values))
+        dispatch(loginUser(values));
         setTimeout(() => {
-            navigate('/login')
-        }, 1000)
+            navigate('/')
+        }, 500)
+        formik.resetForm()
     }
   })
-   
+
+  if(getTokenfromStorage) {
+    return <Navigate to={'/'}/>
+  }
+
   return (
     <>
         <Meta title='Login'/>

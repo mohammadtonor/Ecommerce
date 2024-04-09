@@ -27,10 +27,10 @@ const FeaturedCard = ({items, grid}) => {
                     <span className='brand'>{items?.brand?.title}</span>
                     <span className='product-title'>{items?.title}</span>
                     <Rating ratingValue={4} size={20} initialValue={items?.totalRating}/>
-                    <p className='product-desc'
+                    {/* <p className='product-desc'
                         dangerouslySetInnerHTML={{__html:  items?.description}}
                     >
-                    </p>
+                    </p> */}
                     <h5 className='product-price'>$ {items?.price}</h5>
                 </div>
                 <div className="action-bar">

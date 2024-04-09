@@ -7,7 +7,7 @@ import { useState } from 'react';
 import Zoom from 'react-medium-image-zoom';
 import { FaRegHeart } from "react-icons/fa";
 import { IoGitCompareOutline } from "react-icons/io5";
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { LiaShippingFastSolid } from "react-icons/lia";
 import { MdContentCopy } from "react-icons/md";
 import 'react-medium-image-zoom/dist/styles.css'
@@ -21,14 +21,16 @@ import { addToCart, getPrroductCarts } from '../features/users/userSlice';
 const SingleProduct = () => {
   const [createReview, setCreateReview] = useState(false);
   const [color, setColor] = useState('')
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const location = useLocation()
   const [quantity, setQuantity] = useState(1);
   const [addedToCart, setAddedToCart] = useState(false)
   const dispatch = useDispatch();
   const {id: prodId} = useParams(); 
   const { productData } = useSelector(state => state.product);
   const cartState = useSelector(state => state.auth?.cartProducts);
-
+  const customer = useSelector(state => state.auth.user);
+  console.log(customer);
   useEffect(() => {
     dispatch(getOneProduct(prodId))
     dispatch(getPrroductCarts());
@@ -47,6 +49,7 @@ const SingleProduct = () => {
   } 
   
   const handleAddToCart = (id) => {
+    if(!customer) navigate('/login', { state: { from: location }})
     if(addedToCart) navigate('/cart')
     const totalPrice = quantity * parseInt(productData?.price)
     const data = {
@@ -224,9 +227,7 @@ const SingleProduct = () => {
                     </div>
                     <span className='review-card-item__write' onClick={() => setCreateReview(!createReview)}>Write a Review</span>
                 </div>
-                {createReview && (
-
-                
+                {createReview && (                
                 <form>
                     <h4>write a Review</h4>
                     <div className='form-group'>

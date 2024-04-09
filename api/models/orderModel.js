@@ -13,10 +13,10 @@ const orderSchema = new mongoose.Schema({
     other: {type: String, required: true},
    },
    paymentInfo: {
-    razorpsyOrderId: {type: String, required: true},
-    razorpayPaymentId: {type: String, required: true},
+    razorpayOrderId: {type: String},
+    razorpayPaymentId: {type: String},
    },
-   orderItem: [{
+   orderItems: [{
     product: {type: ObjectId,ref: "Product", required: true},
     quantity: {type: Number, required: true},
     price: {type: Number, required: true},
@@ -24,9 +24,10 @@ const orderSchema = new mongoose.Schema({
    }],
    orderStatus: {
        type: String,
-       default: "Not Processed",
+       default: "Not Paied",
        enum: [
-      "Not Processed", 
+      "Not Paied",
+      "Paied", 
       "Processing", 
       "Shipped", 
       "Delivered", 
@@ -35,7 +36,7 @@ const orderSchema = new mongoose.Schema({
       "Refunded"
     ],
     totalPrice: {type: Number, required: true},
-    totalPriceAfterDiscount: {type: Number, required: true},
+    totalPriceAfterDiscount: {type: Number, default: 0},
    },
    paidAt: {
     type: Date,

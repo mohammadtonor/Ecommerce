@@ -1,11 +1,15 @@
 import './checkout.scss';
 import Meta from '../components/Meta';
 import { Link } from 'react-router-dom';
-import {useSelector} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import {object, string} from 'yup'
 import {useFormik} from 'formik';
+import { toast } from 'react-toastify';
+import { getTokenfromStorage } from '../utils/configToken';
+import { getPrroductCarts } from '../features/users/userSlice';
+
 
 const infoSchema = object({
     firstName: string().required('FirstName is required'),
@@ -18,12 +22,15 @@ const infoSchema = object({
 })
 
 const Checkout = () => {
-  const cartState = useSelector(state => state.auth.cartProducts);
-  const [subtotal, setSubtotal] = useState(0);
-
-  useEffect(() => {
-    setSubtotal(cartState?.reduce((acc, cur) => {
-      return acc + cur.price;
+    const [subtotal, setSubtotal] = useState(0);
+    const dispach = useDispatch();
+    useEffect(() => {
+        dispach(getPrroductCarts())
+    }, [])
+    const cartState = useSelector(state => state.auth.cartProducts);
+    useEffect(() => {
+        setSubtotal(cartState?.reduce((acc, cur) => {
+            return acc + cur.price;
     }, 0));
   }, [cartState])
 
@@ -40,9 +47,29 @@ const Checkout = () => {
         country: '',
     },
     validationSchema: infoSchema,
-    onSubmit: (values) => {
-
-    }
+    onSubmit: async (values) => {
+        await fetch('http://localhost:5000/api/users/cart/checkout', {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${getTokenfromStorage}`
+             },
+            body: JSON.stringify({
+                shippingInfo: {
+                    ...values
+                },
+                cartProducts: cartState
+            }),
+        }).then( async (res) => {
+             if(res.ok) {
+                toast.success("Resirecting to payment")
+                const href = await res.json()
+                window.location.replace(href);
+            } else {
+                toast.error("Something went wrong")
+            }  
+        }) 
+    }  
   })
 
   return (
@@ -86,7 +113,6 @@ const Checkout = () => {
                                     value={formik.values.country}
                                     onChange={formik.handleChange('country')}
                                     onBlur={formik.handleBlur('country')}
-                                    defaultValue={formik.values.country}
                                 >
                                     <option value={null}>Select a Country</option>
                                     <option value="1">Iran</option>
@@ -103,6 +129,7 @@ const Checkout = () => {
                                 <input 
                                     type="text" 
                                     id="firstName" 
+                                    name='firstName' 
                                     placeholder="FirstName (Optional)" 
                                     value={formik.values.firstName}
                                     onChange={formik.handleChange('firstName')}
@@ -198,7 +225,7 @@ const Checkout = () => {
                                 </div>
                             <div className='form-group-action'>
                                 <Link to={'/'}>Back to Cart</Link>
-                                <button type='button'>Continue to Shipping</button>
+                                <button type='submit'>Continue to Shipping</button>
                             </div>
                         </form>
                         <div className='checkout-left-data__footer'>
@@ -224,7 +251,7 @@ const Checkout = () => {
                                         </div>
                                     </div>
                                     <div className='checkout-right-data__body__item__price'>
-                                        <h5>$ {item.price.toFixed(2)}</h5>
+                                        <h5>${item.price.toFixed(2)}</h5>
                                     </div>
                                 </div>
                         

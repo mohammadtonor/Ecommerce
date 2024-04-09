@@ -1,7 +1,8 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import userService from './userService';
 import { config, getCustomerfromStorage } from '../../utils/configToken';
 import {toast} from 'react-toastify';
+
 
 export const regiterUser = createAsyncThunk(
     'auth/registerUser',
@@ -80,13 +81,27 @@ export const updateCartItem = createAsyncThunk(
     }
 )
 
+export const checkout = createAction(
+    'auth/checkout',
+    async (date, thunkAPI) => {
+        try {
+            return await userService.checkout(date);
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error)
+        }
+    }
+)
+
+export const resetAuth = createAction("Reset_Auth")
+
 const initialState = {
     user: getCustomerfromStorage,
+    createdUser: null,
     isSuccess: false,
     isLoading: false,
     isError: false,
     message: "",
-    cartProducts: null,
+    cartProducts: null,    
 }
 
 export const authSlice = createSlice({
@@ -97,6 +112,7 @@ export const authSlice = createSlice({
         builder
            .addCase(regiterUser.pending, (state) => {
                 state.isLoading = true;
+                state.isSuccess = false;
             })
            .addCase(regiterUser.fulfilled, (state, action) => {
                 state.isLoading = false;
@@ -114,6 +130,8 @@ export const authSlice = createSlice({
             .addCase(loginUser.pending, 
                 (state,) => {
                     state.isLoading = true;
+                    state.createdUser= null;
+                    state.isSuccess = false;
             })
             .addCase(loginUser.fulfilled, 
                 (state, action) => {
@@ -124,6 +142,7 @@ export const authSlice = createSlice({
                         localStorage.setItem('token', action.payload.token);
                     }
                     state.user = action.payload;
+                    state.createdUser = action.payload;
             })
             .addCase(loginUser.rejected, 
                 (state, action) => {
@@ -229,6 +248,11 @@ export const authSlice = createSlice({
                 state.isSuccess = false;
                 state.message = action.error;
             })
+            .addCase(resetAuth, (state) => {
+                state.createdUser = null;
+                state.isSuccess = false;
+            })
+            
     } 
 })
 

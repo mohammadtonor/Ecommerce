@@ -23,6 +23,7 @@ import {
   updateUserById,
 } from "../controllers/userCtrl.js";
 import { authMiddleware, isAdmin } from '../middleware/authMiddleware.js';
+import { checkout } from '../controllers/paymentCtrl.js';
 
 
 const router = express.Router();
@@ -41,7 +42,7 @@ router.put('/apply-coupon', authMiddleware, applyCoupon);
 router.get('/get-user-orders/:id', authMiddleware, getUserOrders);
 router.get('/getAll-orders', authMiddleware, getAllOrders);
 router.post('/cart/order-create', authMiddleware, createOrder);
-
+router.post('/cart/checkout', authMiddleware, checkout)
 router.get('/:id',authMiddleware,isAdmin, getUserById);
 router.delete('/:id', DeleteUserById);
 router.put('/:id',authMiddleware , updateUserById);

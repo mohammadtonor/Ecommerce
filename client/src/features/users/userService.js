@@ -39,8 +39,12 @@ const removeFromCard = async (cartId) => {
 }
 
 const updateCartItem = async (cartDate) => {
-    console.log(cartDate);
     const response = await axios.put(`${BASE_URL}users/update-cart`, cartDate, config)
+    return response.data;
+}
+
+const checkout = async (data) => {
+    const response = await axios.put(`${BASE_URL}users/cart/checkout`, data, config)
     return response.data;
 }
 
@@ -51,7 +55,8 @@ const userService = {
     addToCart,
     getPrroductCarts,
     removeFromCard,
-    updateCartItem
+    updateCartItem,
+    checkout
 }
 
 export default userService;

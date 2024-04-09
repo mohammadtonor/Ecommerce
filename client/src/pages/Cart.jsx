@@ -20,7 +20,7 @@ const Cart = () => {
   }, []);
 
   useEffect(() => {
-    let total = !!cartProducts && cartProducts?.reduce((acc, curr) => acc + curr.price, 0);
+    let total = Array.isArray(cartProducts) && cartProducts?.reduce((acc, curr) => acc + curr.price, 0);
     setSubtotla(total);    
   }, [cartProducts])
 

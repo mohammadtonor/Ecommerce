@@ -18,6 +18,7 @@ import couponRoute from './routes/couponRoute.js';
 import orderRoute from './routes/orderRoute.js';
 import enqRoute from './routes/enqRoute.js';
 import uploadRoute from './routes/uploadRoute.js';
+import webhookRouter from './routes/webhookRouter.js';
 import cors from 'cors'
 
 dotenv.config();
@@ -31,10 +32,14 @@ app.use(express.static(path.join(__dirname, "../client/build")));
 app.use(morgan("dev"));
 
 app.use(cors());
+
+app.use("/api/webhook", express.raw({ type: "*/*" }));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
+app.use('/api/webhook', webhookRouter);
 app.use('/api/auth', authRouter);
 app.use('/api/products', productRouter);
 app.use('/api/users', userRouter);
