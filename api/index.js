@@ -53,6 +53,11 @@ app.use('/api/orders', orderRoute);
 app.use('/api/contacts', enqRoute);
 app.use('/api/upload', uploadRoute);
 
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "../client/build/index.html"))
+  });
+  
+
 app.use(notFound)
 app.use(errorHandler)
 

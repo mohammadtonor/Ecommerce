@@ -48,6 +48,26 @@ const checkout = async (data) => {
     return response.data;
 }
 
+const getOrdersUserById = async () => {
+    const response = await axios.get(`${BASE_URL}users/get-orders-user`, config);
+    return response.data;
+}
+
+const updateUser = async (user) => {
+    const response = await axios.put(`${BASE_URL}users`, user, config)
+    return response.data;
+}
+
+const getUserById = async () => {
+    const response = await axios.get(`${BASE_URL}users/get-customer`, config)
+    return response.data;
+}
+
+const forgotPassword = async (data) => {
+    const response = await axios.post(`${BASE_URL}users/forgot-password-token`,data)
+    return response.data;
+}
+
 const userService = {
     registerUser,
     loginUser,
@@ -56,7 +76,11 @@ const userService = {
     getPrroductCarts,
     removeFromCard,
     updateCartItem,
-    checkout
+    checkout,
+    getOrdersUserById,
+    updateUser,
+    getUserById,
+    forgotPassword
 }
 
 export default userService;

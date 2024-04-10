@@ -81,11 +81,44 @@ export const updateCartItem = createAsyncThunk(
     }
 )
 
-export const checkout = createAction(
-    'auth/checkout',
-    async (date, thunkAPI) => {
+export const getOrdersByUserId = createAsyncThunk(
+    'auth/getOrdersByUserId',
+    async (thunkAPI) => {
         try {
-            return await userService.checkout(date);
+            return await userService.getOrdersUserById();
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error)
+        }
+    }
+)
+
+export const updateUser = createAsyncThunk(
+    'auth/updateUser',
+    async (user, thunkAPI) => {
+        try {
+            return await userService.updateUser(user);
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error)
+        }
+    }
+)
+
+export const getOneCustomer = createAsyncThunk(
+    'auth/getOneCustomer',
+    async (thunkAPI) => {
+        try {
+            return await userService.getUserById()
+        } catch (error) {
+            return thunkAPI.rejectWithValue(error)
+        }
+    }
+)
+
+export const forgotPassword = createAsyncThunk(
+    'auth/forgotPassword',
+    async (data ,thunkAPI) => {
+        try {
+            return await userService.forgotPassword(data)
         } catch (error) {
             return thunkAPI.rejectWithValue(error)
         }
@@ -101,7 +134,10 @@ const initialState = {
     isLoading: false,
     isError: false,
     message: "",
-    cartProducts: null,    
+    cartProducts: null,
+    customerOrders: null,
+    customerProfile: null,
+    forgotPasswordToken: null,   
 }
 
 export const authSlice = createSlice({
@@ -248,11 +284,85 @@ export const authSlice = createSlice({
                 state.isSuccess = false;
                 state.message = action.error;
             })
-            .addCase(resetAuth, (state) => {
-                state.createdUser = null;
-                state.isSuccess = false;
+            .addCase(resetAuth, () => initialState)
+            .addCase(getOrdersByUserId.pending, (state) => {
+                state.isLoading = true;
             })
-            
+            .addCase(getOrdersByUserId.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.isSuccess = true;
+                state.isError = false;
+                state.cartProducts = null;
+                state.customerOrders = action.payload
+            })
+            .addCase(getOrdersByUserId.rejected, (state, action) => {
+                state.isLoading = false;
+                state.isError = true;
+                state.isSuccess = false;
+                state.message = action.error;
+            })
+            .addCase(updateUser.pending, 
+                (state) => {
+                    state.isLoading = true;
+                }
+            )
+            .addCase(updateUser.fulfilled, 
+                (state, action) => {
+                    state.isLoading = false;
+                    state.isSuccess = true;
+                    state.isError = false;
+                    state.customerProfile = action.payload
+                    if(state.isSuccess) {
+                        toast.success("User Updated Successfully!")
+                    }
+            })
+            .addCase(updateUser.rejected, 
+                (state, action) => {
+                    state.isLoading = false;
+                    state.isError = true;
+                    state.isSuccess = false;
+                    state.message = action.error;
+                    if(state.isError) {
+                        toast.error("Somthing went wrong!")
+                    }
+            })
+            .addCase(getOneCustomer.pending,
+                (state) => {
+                    state.isLoading =true;
+                }
+            )
+            .addCase(getOneCustomer.fulfilled,
+                (state, action) => {
+                    state.isLoading = false;
+                    state.isSuccess = true;
+                    state.isError = false;
+                    state.customerProfile = action.payload
+            })
+            .addCase(getOneCustomer.rejected,
+                (state, action) => {
+                    state.isLoading = false;
+                    state.isError = true;
+                    state.isSuccess = false;
+                    state.message = action.error;
+            })
+            .addCase(forgotPassword.pending, 
+                (state) => {
+                    state.isLoading =true;
+                }
+            ).addCase(forgotPassword.fulfilled,
+                (state, action) => {
+                    state.isLoading = false;
+                    state.isSuccess = true;
+                    state.isError = false;
+                    state.forgotPasswordToken = action.payload
+            })
+            .addCase(forgotPassword.rejected,
+                (state, action) => {
+                    state.isLoading = false;
+                    state.isError = true;
+                    state.isSuccess = false;
+                    state.message = action.error;
+            })
     } 
 })
 

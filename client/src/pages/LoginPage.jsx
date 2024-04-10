@@ -23,7 +23,6 @@ const LoginPage = () => {
   
   useEffect(() => {
       dispatch(resetAuth())
-      console.log(!!getTokenfromStorage);
       if(getTokenfromStorage) {
          navigate('/')
       }

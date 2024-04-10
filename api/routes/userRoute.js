@@ -9,6 +9,8 @@ import {
   forgotPasswordToken,
   getAllOrders,
   getAllUser,
+  getOneCustomer,
+  getOrdersByUserId,
   getUserById,
   getUserCart,
   getUserOrders,
@@ -40,14 +42,16 @@ router.put('/remove-cart', authMiddleware, removeFromCard);
 router.put('/update-cart', authMiddleware, updateCartItem);
 router.put('/apply-coupon', authMiddleware, applyCoupon);
 router.get('/get-user-orders/:id', authMiddleware, getUserOrders);
+router.get('/get-orders-user', authMiddleware, getOrdersByUserId);
 router.get('/getAll-orders', authMiddleware, getAllOrders);
 router.post('/cart/order-create', authMiddleware, createOrder);
 router.post('/cart/checkout', authMiddleware, checkout)
+router.get('/get-customer',authMiddleware, getOneCustomer);
 router.get('/:id',authMiddleware,isAdmin, getUserById);
 router.delete('/:id', DeleteUserById);
-router.put('/:id',authMiddleware , updateUserById);
+router.put('/',authMiddleware , updateUserById);
 router.put('/block-user/:id', authMiddleware, isAdmin, blockUser);
 router.put('/unblock-user/:id', authMiddleware , isAdmin, unblockUser);
 router.post('/password', authMiddleware, updatePassword);
- 
+
 export default router;   

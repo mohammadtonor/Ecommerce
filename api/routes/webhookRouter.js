@@ -13,11 +13,14 @@ router.post ('/' , asyncHandler( async (req, res) => {
     const sig = req.headers['stripe-signature'];
     let event;
     try {
-      event = STRIPE.webhooks.constructEvent(req.body, sig, STRIPE_ENDPOINT_SECRET);
+      const reqBuffer = await req.body
+      const buffer = Buffer.from(reqBuffer)
+      console.log(buffer.toString());
+      event = STRIPE.webhooks.constructEvent(buffer.toString(), sig, STRIPE_ENDPOINT_SECRET);
     } catch (err) {
         console.log(err.message);
       res.status(400).send(`Webhook Error: ${err.message}`);
-      return;
+      return; 
     }
   
 

@@ -7,7 +7,8 @@ const CustomInput = ({
     onChange,
     onBlur,
     val,
-    calssname
+    calssname,
+    isDisabled
 }) => {
   return (
     <div className="form-group">
@@ -19,6 +20,7 @@ const CustomInput = ({
             onChange={onChange}
             onBlur={onBlur}
             value={val}
+            disabled={isDisabled}
          />
     </div>
   )

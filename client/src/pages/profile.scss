@@ -4,49 +4,45 @@
     --color-febd69: #febd69;
 }
 
-.forgot-container {
+.profile-container {
     display: flex;
     justify-content: center;
     align-items: center;
     
-    .forgot-cord {
-        width: 45%;
+    .profile-cord {
+        width: 100%;
         background-color: white;
         padding: 2rem;
-        padding-bottom: 1.5rem;
         border-radius: 10px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-
-        h3 {
-            font-size: 1.3rem;
-            font-weight: 600;
+        div{
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 1rem;
-            text-align: center;
-            color: #777;
-        }
-
-        p {
-            font-size: 0.9rem;
-            color: #777;
-            margin-bottom: 1rem;
-            text-align: center;
+            button {
+                padding: 0;
+            }
+            h3 {
+                font-size: 1.3rem;
+                font-weight: 600;
+                text-align: center;
+                color: #777;
+                margin: 0;
+            }
         }
         .error {
-            color: rgb(165, 35, 35);
-            font-size: 14px;
-            font-weight: bold;
+            color: red;
         }
 
-        .forgot-action {
+        .profile-action {
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-            margin-top: 5px;
-            margin-bottom: 0;
+            justify-content: start;
+            align-items: start;
+            margin-top: 15px;
+            
             button {
-                padding: 0.4rem 1.3rem;
+                padding: .7rem 2rem;
                 background-color: var(--color-232f3a);
                 color: white;
                 max-width: 150px;
@@ -55,26 +51,15 @@
                 border: none;
                 cursor: pointer;
                 border-radius: 20px;
-                margin-top: 10px;
                 &:hover {
                     background-color: var(--color-febd69);
                     color: #232f3a;
                 } 
             }
 
-            a {
-                text-decoration: none;
-                font-size: 1rem;
-                font-weight: 600;
-                margin-bottom: 0;
-                color: var(--color-232f3a);
-               
-                &:hover {
-                    color: var(--color-febd69);
-                }
-            }
             
         }
+
         .form-group{
             
             input {
@@ -88,7 +73,18 @@
                 &:focus {
                     outline: 1px solid rgb(153, 153, 153);
                 }
-            }  
+            }
+            
+            .error {
+                 color: red;
+            }
+            
+        }
+        a{
+            color: var(--color-232f3a);
+            text-decoration: none;
+            font-size: 0.8rem;
+            margin-bottom: 5px;
         }
     }
 }

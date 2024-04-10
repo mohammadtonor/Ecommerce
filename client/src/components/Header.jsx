@@ -5,13 +5,22 @@ import { MdFavoriteBorder   } from "react-icons/md";
 import { FaRegUser } from "react-icons/fa";
 import { SlBasket } from "react-icons/sl";
 import { CgMenuGridO } from "react-icons/cg";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { resetAuth } from "../features/users/userSlice";
 
 const Header = () => {
+  const dispatch = useDispatch();
   const cartState = useSelector(state => state.auth.cartProducts);
+  const user = useSelector(state => state.auth.user);
 
   const totalQuantity = Array.isArray(cartState) && cartState?.reduce((acc, curr) => curr?.quantity + acc, 0);
   const totalAmount = Array.isArray(cartState) && cartState?.reduce((acc, curr) => curr?.price + acc, 0);
+
+  const handleLogout = () => {
+    localStorage.clear();
+    dispatch(resetAuth())
+    window.location.reload();
+  }
   return (
     <>
       <header className="header-top-strip py-3 pb-0">
@@ -124,6 +133,10 @@ const Header = () => {
                     <NavLink className='' to={'/blogs'} >Blogs</NavLink>
                     <NavLink className='' to={'/about'} >About</NavLink>
                     <NavLink className='' to={'/contact'} >Contact</NavLink>
+                    {user && (
+                      <NavLink className='' onClick={handleLogout} >Logout</NavLink>
+                    )}
+
                   </div>
                 </div>
               </div>

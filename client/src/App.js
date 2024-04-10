@@ -26,6 +26,8 @@ import SingleProduct from './pages/SingleProduct';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import {ProtectedRoute} from './components/ProtectedRoute';
+import Orders from './pages/Orsers';
+import Profile from './pages/Profile';
 
 function App() {
   return (
@@ -52,6 +54,8 @@ function App() {
             <Route path='refund-policy' element={<RefundPolicy /> } />
             <Route path='term-policy' element={<TermPolicy /> } />
             <Route path='shiping-policy' element={<ShipingPolicy /> } />
+            <Route path='orders' element={<Orders /> } />
+            <Route path='profile' element={<ProtectedRoute><Profile /> </ProtectedRoute>} />
           </Route>
         </Routes>
       </BrowserRouter>

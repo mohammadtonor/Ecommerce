@@ -173,7 +173,35 @@ export const getUserById =asyncHandler (async (req, res) => {
         if (!user) {
             throw new Error("User does not exist");
         }
-        const {password, ...otherField} = user._doc;
+        const { 
+            password,
+            passwordResetExpires,
+            passwordResetToken,
+            __v,
+           ...otherField
+        } = user._doc;
+        res.status(200).json(otherField);
+    } catch (error) {
+        throw new Error(error);
+    }
+})
+
+export const getOneCustomer =asyncHandler (async (req, res) => {
+    try {
+        console.log("kljdfkdsf;");
+        const { _id } = req.user;
+        validateMongodbId(_id);
+        const user = await User.findById(_id);
+        if (!user) {
+            throw new Error("User does not exist");
+        }
+        const { 
+            password,
+            passwordResetExpires,
+            passwordResetToken,
+            __v,
+           ...otherField
+        } = user._doc;
         res.status(200).json(otherField);
     } catch (error) {
         throw new Error(error);
@@ -197,16 +225,26 @@ export const DeleteUserById =asyncHandler (async (req, res) => {
 
 export const updateUserById =asyncHandler (async (req, res) => {
     try {
-        const { id } = req.params;
-        validateMongodbId(id);
-        const user = await User.findById(id);
+        const { _id } = req.user;
+        validateMongodbId(_id);
+        const user = await User.findById(_id);
         if (!user) {
             throw new Error("User does not exist");
         }
-        const Updated = await User.findByIdAndUpdate(id, {
-            ...req.body
-        });
-        res.status(200).json({message: `User By email: (${user.email}) Updated!`});
+        const updated = await User.findByIdAndUpdate(
+            _id, 
+            { ...req.body },
+            {nwe: true}
+        );
+        const updatedUser = await User.findById(_id)
+        const { 
+            password,
+            passwordResetExpires,
+            passwordResetToken,
+            __v,
+           ...otherField
+        } = updatedUser._doc;
+        res.status(200).json(otherField);
     } catch (error) {
         throw new Error(error);
     }
@@ -285,7 +323,6 @@ export const updatePassword = asyncHandler(async (req, res) => {
             htm: resetURL
         } 
         sendEmail(data);  
-        console.log(data.htm);
         res.json(token);  
     } catch (error) {
         throw new Error(error.message);
@@ -471,8 +508,8 @@ export const updatePassword = asyncHandler(async (req, res) => {
     validateMongodbId(id);
     try {
         const orders = await Order.find({ orderBy:{ _id: id }})
-            .populate('orderBy products.product',
-                ['title', 'price','firstName','lastName', 'product._id', 'orderBy._id'])
+            .populate('userId orderItem.product orderItem.color',
+                ['title', 'price','firstName','lastName', 'product._id'])
         res.json(orders);
     } catch (error) {
         throw new Error(error)
@@ -504,3 +541,16 @@ export const updatePassword = asyncHandler(async (req, res) => {
     }
   })
 
+export const getOrdersByUserId =  asyncHandler( async(req, res) => {
+    const {_id} = req.user;
+    console.log();
+    validateMongodbId(_id);
+    try {
+        const orders = await Order.find({ userId: _id})
+            .populate('userId orderItems.product orderItems.color',
+                ['title', 'price','firstName','lastName', 'product._id'])
+        res.json(orders);
+    } catch (error) {
+        throw new Error(error) 
+    }
+})
