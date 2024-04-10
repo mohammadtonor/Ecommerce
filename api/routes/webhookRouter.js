@@ -15,8 +15,7 @@ router.post ('/' , asyncHandler( async (req, res) => {
     try {
       const reqBuffer = await req.body
       const buffer = Buffer.from(reqBuffer)
-      console.log(buffer.toString());
-      event = STRIPE.webhooks.constructEvent(buffer.toString(), sig, STRIPE_ENDPOINT_SECRET);
+      event = STRIPE.webhooks.constructEvent(buffer.toJSON(), sig, STRIPE_ENDPOINT_SECRET);
     } catch (err) {
         console.log(err.message);
       res.status(400).send(`Webhook Error: ${err.message}`);
