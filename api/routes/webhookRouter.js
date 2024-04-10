@@ -2,7 +2,6 @@ import express from 'express';
 import Order from '../models/orderModel.js';
 import asyncHandler from "express-async-handler";
 import Stripe from 'stripe';
-import { buffer } from 'micro'
 
 const router = express.Router();
 
