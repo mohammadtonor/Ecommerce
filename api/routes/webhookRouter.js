@@ -2,20 +2,19 @@ import express from 'express';
 import Order from '../models/orderModel.js';
 import asyncHandler from "express-async-handler";
 import Stripe from 'stripe';
+import { buffer } from 'micro'
 
 const router = express.Router();
 
-const STRIPE = new Stripe(process.env.STRIPE_API_KEY);
-const STRIPE_ENDPOINT_SECRET = process.env.STRIPE_SIGN_SECRET;
 
 router.post ('/' , asyncHandler( async (req, res) => {
   
+    const STRIPE = new Stripe(process.env.STRIPE_API_KEY);
+    const STRIPE_ENDPOINT_SECRET = process.env.STRIPE_SIGN_SECRET;
     const sig = req.headers['stripe-signature'];
     let event;
     try {
-      const reqBuffer = await req.body
-      const buffer = Buffer.from(reqBuffer)
-      event = STRIPE.webhooks.constructEvent(buffer.toJSON(), sig, STRIPE_ENDPOINT_SECRET);
+      event = STRIPE.webhooks.constructEvent(req.body, sig, STRIPE_ENDPOINT_SECRET);
     } catch (err) {
         console.log(err.message);
       res.status(400).send(`Webhook Error: ${err.message}`);
@@ -36,7 +35,7 @@ if (event.type === 'checkout.session.completed') {
     }
   }
   
-  res.json('ok', {status: 200});
+  res.status(200).send();
 
 }))
 
