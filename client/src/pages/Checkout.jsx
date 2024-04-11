@@ -9,6 +9,7 @@ import {useFormik} from 'formik';
 import { toast } from 'react-toastify';
 import { getTokenfromStorage } from '../utils/configToken';
 import { getPrroductCarts } from '../features/users/userSlice';
+import { BASE_URL } from '../utils/baseUrl';
 
 
 const infoSchema = object({
@@ -48,7 +49,7 @@ const Checkout = () => {
     },
     validationSchema: infoSchema,
     onSubmit: async (values) => {
-        await fetch('http://localhost:5000/api/users/cart/checkout', {
+        await fetch(`${BASE_URL}users/cart/checkout`, {
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json',
