@@ -11,7 +11,7 @@ router.post ('/' , asyncHandler( async (req, res) => {
   const STRIPE = new Stripe(process.env.STRIPE_API_KEY);
   const STRIPE_ENDPOINT_SECRET = process.env.STRIPE_SIGN_SECRET;
   const sig = req.headers['stripe-signature'];
-  let event;console.log(sig, STRIPE_ENDPOINT_SEC);
+  let event;
   try {
     event = STRIPE.webhooks.constructEvent(req.body, sig, STRIPE_ENDPOINT_SECRET);
   } catch (err) {
