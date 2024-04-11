@@ -8,7 +8,9 @@ const Orsers = () => {
   const dispatch = useDispatch()
   const {customerOrders} = useSelector(state => state.auth);
 
-  useEffect(() => dispatch(getOrdersByUserId()), [])
+  useEffect(() => {
+    dispatch(getOrdersByUserId())
+  }, [])
   return (
     <> 
        <Meta title='Our Store'/>

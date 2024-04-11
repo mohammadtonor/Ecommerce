@@ -57,7 +57,7 @@ export const checkout = asyncHandler(async (req, res) => {
         shipping_rate_data: {
           display_name: 'Delivery fee',
           type: 'fixed_amount',
-          fixed_amount: {amount: 1000, currency: 'USD'},
+          fixed_amount: {amount: 100, currency: 'USD'},
         },
       }
     ],
