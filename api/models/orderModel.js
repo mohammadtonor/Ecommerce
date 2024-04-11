@@ -35,9 +35,9 @@ const orderSchema = new mongoose.Schema({
       "Returned", 
       "Refunded"
     ],
-    totalPrice: {type: Number, required: true},
-    totalPriceAfterDiscount: {type: Number, default: 0},
    },
+   totalPrice: {type: Number, required: true},
+   totalPriceAfterDiscount: {type: Number, default: 0},
    paidAt: {
     type: Date,
     default: Date.now(),
