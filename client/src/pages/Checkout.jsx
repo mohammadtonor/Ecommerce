@@ -49,7 +49,7 @@ const Checkout = () => {
     },
     validationSchema: infoSchema,
     onSubmit: async (values) => {
-        await fetch(`${BASE_URL}users/cart/checkout`, {
+        await fetch(`https://ecommerce-8146.onrender.com/api/users/cart/checkout`, {
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json',
